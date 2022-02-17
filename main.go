@@ -7,6 +7,7 @@ import (
 	integer "github.com/ichang0301/learn-golang/2_integer"
 	iteration "github.com/ichang0301/learn-golang/3_iteration"
 	arrays "github.com/ichang0301/learn-golang/4_arrays-and-slices"
+	structs "github.com/ichang0301/learn-golang/5_structs-methods-interfaces"
 )
 
 func main() {
@@ -20,4 +21,9 @@ func main() {
 	fmt.Println(arrays.SumSlices([]int{1, 2, 3, 4, 5}))
 	fmt.Println(arrays.SumAll([]int{1, 2, 3}, []int{1, 2, 3, 4, 5}))
 	fmt.Println(arrays.SumAllTails([]int{0, 9}, []int{1, 2, 3}))
+
+	fmt.Println(structs.Perimeter(structs.Rectangle{Width: 5.0, Height: 10.0}))
+	fmt.Println(structs.Rectangle{Width: 10.0, Height: 15.0}.Area())
+	fmt.Println(structs.Circle{Radius: 1.0}.Area())
+	fmt.Println(structs.Triangle{Base: 5.0, Height: 4.0}.Area())
 }
