@@ -8,6 +8,7 @@ import (
 	iteration "github.com/ichang0301/learn-golang/3_iteration"
 	arrays "github.com/ichang0301/learn-golang/4_arrays-and-slices"
 	structs "github.com/ichang0301/learn-golang/5_structs-methods-interfaces"
+	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
 )
 
 func main() {
@@ -26,4 +27,9 @@ func main() {
 	fmt.Println(structs.Rectangle{Width: 10.0, Height: 15.0}.Area())
 	fmt.Println(structs.Circle{Radius: 1.0}.Area())
 	fmt.Println(structs.Triangle{Base: 5.0, Height: 4.0}.Area())
+
+	oh_wallet := pointer.Wallet{}
+	oh_wallet.Deposit(30)
+	oh_wallet.Withdraw(20)
+	fmt.Println(oh_wallet.Balance())
 }
