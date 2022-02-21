@@ -9,6 +9,7 @@ import (
 	arrays "github.com/ichang0301/learn-golang/4_arrays-and-slices"
 	structs "github.com/ichang0301/learn-golang/5_structs-methods-interfaces"
 	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
+	maps "github.com/ichang0301/learn-golang/7_maps"
 )
 
 func main() {
@@ -32,4 +33,15 @@ func main() {
 	oh_wallet.Deposit(30)
 	oh_wallet.Withdraw(20)
 	fmt.Println(oh_wallet.Balance())
+
+	var dictionary = maps.Dictionary{}
+	dictionary.Add("test", "this is just a test")
+	fmt.Println(dictionary)
+	if definition, err := dictionary.Search("test"); err == nil {
+		fmt.Printf("definition: %s\n", definition)
+	}
+	dictionary.Update("test", "new definition")
+	fmt.Println(dictionary)
+	dictionary.Delete("test")
+	fmt.Println(dictionary)
 }
