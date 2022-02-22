@@ -33,16 +33,22 @@ func main() {
 
 	oh_wallet := pointer.Wallet{}
 	oh_wallet.Deposit(30)
-	oh_wallet.Withdraw(20)
+	if err := oh_wallet.Withdraw(20); err != nil {
+		fmt.Errorf("Failed to Withdraw(): %q\n", err)
+	}
 	fmt.Println(oh_wallet.Balance())
 
 	var dictionary = maps.Dictionary{}
-	dictionary.Add("test", "this is just a test")
+	if err := dictionary.Add("test", "this is just a test"); err != nil {
+		fmt.Errorf("Failed to Add() to dictionary: %q\n", err)
+	}
 	fmt.Println(dictionary)
 	if definition, err := dictionary.Search("test"); err == nil {
 		fmt.Printf("definition: %s\n", definition)
 	}
-	dictionary.Update("test", "new definition")
+	if err := dictionary.Update("test", "new definition"); err != nil {
+		fmt.Errorf("Failed to Update() to dictionary: %q\n", err)
+	}
 	fmt.Println(dictionary)
 	dictionary.Delete("test")
 	fmt.Println(dictionary)
