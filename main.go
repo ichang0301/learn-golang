@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	hello "github.com/ichang0301/learn-golang/1_hello-world"
 	integer "github.com/ichang0301/learn-golang/2_integer"
@@ -10,6 +11,7 @@ import (
 	structs "github.com/ichang0301/learn-golang/5_structs_methods_interfaces"
 	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
 	maps "github.com/ichang0301/learn-golang/7_maps"
+	dependancy_injection "github.com/ichang0301/learn-golang/8_dependancy-injection"
 )
 
 func main() {
@@ -44,4 +46,6 @@ func main() {
 	fmt.Println(dictionary)
 	dictionary.Delete("test")
 	fmt.Println(dictionary)
+
+	dependancy_injection.Greet(os.Stdout, "Mike")
 }
