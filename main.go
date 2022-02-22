@@ -16,12 +16,6 @@ import (
 	mock "github.com/ichang0301/learn-golang/9_mocking"
 )
 
-type DefaultSleeper struct{}
-
-func (d *DefaultSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
-}
-
 func main() {
 	fmt.Println(hello.Hello("world", ""))
 
@@ -63,6 +57,6 @@ func main() {
 
 	dependancy_injection.Greet(os.Stdout, "Mike")
 
-	sleeper := &DefaultSleeper{}
+	sleeper := &mock.ConfigurableSleeper{1 * time.Second, time.Sleep}
 	mock.Countdown(os.Stdout, sleeper)
 }
