@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	hello "github.com/ichang0301/learn-golang/1_hello-world"
 	integer "github.com/ichang0301/learn-golang/2_integer"
@@ -12,7 +13,14 @@ import (
 	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
 	maps "github.com/ichang0301/learn-golang/7_maps"
 	dependancy_injection "github.com/ichang0301/learn-golang/8_dependancy-injection"
+	mock "github.com/ichang0301/learn-golang/9_mocking"
 )
+
+type DefaultSleeper struct{}
+
+func (d *DefaultSleeper) Sleep() {
+	time.Sleep(1 * time.Second)
+}
 
 func main() {
 	fmt.Println(hello.Hello("world", ""))
@@ -54,4 +62,7 @@ func main() {
 	fmt.Println(dictionary)
 
 	dependancy_injection.Greet(os.Stdout, "Mike")
+
+	sleeper := &DefaultSleeper{}
+	mock.Countdown(os.Stdout, sleeper)
 }
