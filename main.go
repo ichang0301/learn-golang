@@ -7,7 +7,7 @@ import (
 	integer "github.com/ichang0301/learn-golang/2_integer"
 	iteration "github.com/ichang0301/learn-golang/3_iteration"
 	arrays "github.com/ichang0301/learn-golang/4_arrays-and-slices"
-	structs "github.com/ichang0301/learn-golang/5_structs-methods-interfaces"
+	structs "github.com/ichang0301/learn-golang/5_structs_methods_interfaces"
 	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
 	maps "github.com/ichang0301/learn-golang/7_maps"
 )
