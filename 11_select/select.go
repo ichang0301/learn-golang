@@ -18,7 +18,7 @@ func ConfigurableRacer(a, b string, timeout time.Duration) (winner string, err e
 		return a, nil
 	case <-ping(b):
 		return b, nil
-	case <-time.After(timeout): // time.After returns a chan (like ping) and will send a signal down it after the amount of time you define.
+	case <-time.After(timeout): // 'time.After' returns a chan (like ping) and will send a signal down it after the amount of time you define. We can use 'time.After' to prevent your system blocking forever.
 		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
 }
