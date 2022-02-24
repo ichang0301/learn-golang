@@ -5,15 +5,15 @@ import (
 	"os"
 	"time"
 
-	hello "github.com/ichang0301/learn-golang/1_hello-world"
-	integer "github.com/ichang0301/learn-golang/2_integer"
-	iteration "github.com/ichang0301/learn-golang/3_iteration"
-	arrays "github.com/ichang0301/learn-golang/4_arrays-and-slices"
-	structs "github.com/ichang0301/learn-golang/5_structs_methods_interfaces"
-	pointer "github.com/ichang0301/learn-golang/6_pointers-and-errors"
-	maps "github.com/ichang0301/learn-golang/7_maps"
-	dependancy_injection "github.com/ichang0301/learn-golang/8_dependancy-injection"
-	mock "github.com/ichang0301/learn-golang/9_mocking"
+	hello "github.com/ichang0301/learn-golang/01_hello-world"
+	integer "github.com/ichang0301/learn-golang/02_integer"
+	iteration "github.com/ichang0301/learn-golang/03_iteration"
+	arrays "github.com/ichang0301/learn-golang/04_arrays-and-slices"
+	structs "github.com/ichang0301/learn-golang/05_structs_methods_interfaces"
+	pointer "github.com/ichang0301/learn-golang/06_pointers-and-errors"
+	maps "github.com/ichang0301/learn-golang/07_maps"
+	dependancy_injection "github.com/ichang0301/learn-golang/08_dependancy-injection"
+	mock "github.com/ichang0301/learn-golang/09_mocking"
 )
 
 func main() {
