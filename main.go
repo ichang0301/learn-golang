@@ -35,28 +35,22 @@ func main() {
 
 	oh_wallet := pointer.Wallet{}
 	oh_wallet.Deposit(30)
-	if err := oh_wallet.Withdraw(20); err != nil {
-		fmt.Errorf("Failed to Withdraw(): %q\n", err)
-	}
+	oh_wallet.Withdraw(20)
 	fmt.Println(oh_wallet.Balance())
 
 	var dictionary = maps.Dictionary{}
-	if err := dictionary.Add("test", "this is just a test"); err != nil {
-		fmt.Errorf("Failed to Add() to dictionary: %q\n", err)
-	}
+	dictionary.Add("test", "this is just a test")
 	fmt.Println(dictionary)
 	if definition, err := dictionary.Search("test"); err == nil {
 		fmt.Printf("definition: %s\n", definition)
 	}
-	if err := dictionary.Update("test", "new definition"); err != nil {
-		fmt.Errorf("Failed to Update() to dictionary: %q\n", err)
-	}
+	dictionary.Update("test", "new definition")
 	fmt.Println(dictionary)
 	dictionary.Delete("test")
 	fmt.Println(dictionary)
 
 	dependancy_injection.Greet(os.Stdout, "Mike")
 
-	sleeper := &mock.ConfigurableSleeper{1 * time.Second, time.Sleep}
+	sleeper := &mock.ConfigurableSleeper{Duration: 1 * time.Second, SleepDuration: time.Sleep}
 	mock.Countdown(os.Stdout, sleeper)
 }
