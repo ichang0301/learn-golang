@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 	"time"
 
 	hello "github.com/ichang0301/learn-golang/01_hello-world"
@@ -14,6 +15,7 @@ import (
 	maps "github.com/ichang0301/learn-golang/07_maps"
 	dependancy_injection "github.com/ichang0301/learn-golang/08_dependancy-injection"
 	mock "github.com/ichang0301/learn-golang/09_mocking"
+	synchronize "github.com/ichang0301/learn-golang/13_sync"
 )
 
 func main() {
@@ -59,4 +61,18 @@ func main() {
 
 	sleeper := &mock.ConfigurableSleeper{1 * time.Second, time.Sleep}
 	mock.Countdown(os.Stdout, sleeper)
+
+	const wantedCount int = 100
+	var wg sync.WaitGroup
+	wg.Add(wantedCount)
+
+	counter := synchronize.NewCounter()
+	for i := 0; i < wantedCount; i++ {
+		go func() {
+			counter.Inc()
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	fmt.Println(counter.Value())
 }
