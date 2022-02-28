@@ -1,5 +1,6 @@
 // https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/context
 
+// go doc: https://pkg.go.dev/context
 // go blog: https://go.dev/blog/context
 
 package contexts
