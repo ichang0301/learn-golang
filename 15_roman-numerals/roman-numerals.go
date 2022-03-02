@@ -8,7 +8,22 @@ import (
 	"strings"
 )
 
-func ConvertToRoman(arabic uint16) string {
+const (
+	ErrInvalidArabic = ConvertErr("Failed to convert to Roman numeral because it is invalid Arabic value")
+	ErrInvalidRoman  = ConvertErr("Failed to convert to Arabic numeral because it is invalid Roman value")
+)
+
+type ConvertErr string
+
+func (e ConvertErr) Error() string { // implement 'error' interface. : https://go.dev/blog/error-handling-and-go
+	return string(e)
+}
+
+func ConvertToRoman(arabic uint16) (string, error) {
+	if arabic == 0 || arabic > 3999 {
+		return "", ErrInvalidArabic
+	}
+
 	var result strings.Builder
 
 	for _, numeral := range allRomanNumerals {
@@ -18,7 +33,7 @@ func ConvertToRoman(arabic uint16) string {
 		}
 	}
 
-	return result.String()
+	return result.String(), nil
 }
 
 func ConvertToArabic(roman string) (total uint16) {

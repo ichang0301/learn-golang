@@ -71,6 +71,9 @@ func main() {
 	wg.Wait()
 	fmt.Println(counter.Value())
 
+	fmt.Println(roman_numeral.ConvertToRoman(0))
 	fmt.Println(roman_numeral.ConvertToRoman(1984))
+	fmt.Println(roman_numeral.ConvertToRoman(4000))
+	fmt.Println(roman_numeral.ConvertToArabic("N"))
 	fmt.Println(roman_numeral.ConvertToArabic("MCMLXXXIV"))
 }
