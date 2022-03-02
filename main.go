@@ -72,4 +72,5 @@ func main() {
 	fmt.Println(counter.Value())
 
 	fmt.Println(roman_numeral.ConvertToRoman(1984))
+	fmt.Println(roman_numeral.ConvertToArabic("MCMLXXXIV"))
 }
