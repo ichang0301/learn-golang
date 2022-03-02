@@ -16,6 +16,7 @@ import (
 	dependancy_injection "github.com/ichang0301/learn-golang/08_dependancy-injection"
 	mock "github.com/ichang0301/learn-golang/09_mocking"
 	synchronize "github.com/ichang0301/learn-golang/13_sync"
+	roman_numeral "github.com/ichang0301/learn-golang/15_roman-numerals"
 )
 
 func main() {
@@ -69,4 +70,6 @@ func main() {
 	}
 	wg.Wait()
 	fmt.Println(counter.Value())
+
+	fmt.Println(roman_numeral.ConvertToRoman(1984))
 }
