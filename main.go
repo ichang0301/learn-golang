@@ -17,7 +17,7 @@ import (
 	mock "github.com/ichang0301/learn-golang/09_mocking"
 	synchronize "github.com/ichang0301/learn-golang/13_sync"
 	roman_numeral "github.com/ichang0301/learn-golang/15_roman-numerals"
-	draw_clockface "github.com/ichang0301/learn-golang/16_maths/clockface_svg"
+	clockface_svg "github.com/ichang0301/learn-golang/16_maths"
 )
 
 func main() {
@@ -78,5 +78,6 @@ func main() {
 	fmt.Println(roman_numeral.ConvertToArabic("N"))
 	fmt.Println(roman_numeral.ConvertToArabic("MCMLXXXIV"))
 
-	draw_clockface.Draw()
+	t := time.Now()
+	clockface_svg.SVGWriter(os.Stdout, t)
 }
