@@ -6,33 +6,13 @@ import (
 	"time"
 )
 
-func TestSecondsInRadians(t *testing.T) {
-	cases := []struct {
-		time  time.Time
-		angle float64
-	}{
-		{simpleTime(0, 0, 30), math.Pi},
-		{simpleTime(0, 0, 0), 0},
-		{simpleTime(0, 0, 45), (math.Pi / 2) * 3},
-		{simpleTime(0, 0, 7), (math.Pi / 30) * 7},
-	}
-
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondsInRadians(c.time)
-			if got != c.angle {
-				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
-			}
-		})
-	}
+func TestDevideZero(t *testing.T) { // https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#floats-are-horrible and https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#a-note-on-dividing-by-zero
+	t.Logf("30 / (float64(zero())): %v", 30/(float64(zero())))
+	t.Logf("math.Pi / (30/(float64(zero()))): %v", secondsInRadians(simpleTime(0, 0, 0)))
 }
 
-func simpleTime(hours, minutes, seconds int) time.Time {
-	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
-}
-
-func testName(t time.Time) string {
-	return t.Format("15:04:05") // time package: https://pkg.go.dev/time#pkg-constants
+func zero() float64 {
+	return 0.0
 }
 
 func TestSecondHandVector(t *testing.T) {
@@ -64,11 +44,31 @@ func roughlyEqualPoint(a, b Point) bool {
 		roughlyEqualFloat64(a.Y, b.Y)
 }
 
-func TestDevideZero(t *testing.T) { // https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#floats-are-horrible and https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#a-note-on-dividing-by-zero
-	t.Logf("30 / (float64(zero())): %v", 30/(float64(zero())))
-	t.Logf("math.Pi / (30/(float64(zero()))): %v", secondsInRadians(simpleTime(0, 0, 0)))
+func TestSecondsInRadians(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		angle float64
+	}{
+		{simpleTime(0, 0, 30), math.Pi},
+		{simpleTime(0, 0, 0), 0},
+		{simpleTime(0, 0, 45), (math.Pi / 2) * 3},
+		{simpleTime(0, 0, 7), (math.Pi / 30) * 7},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := secondsInRadians(c.time)
+			if got != c.angle {
+				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
+			}
+		})
+	}
 }
 
-func zero() float64 {
-	return 0.0
+func simpleTime(hours, minutes, seconds int) time.Time {
+	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+}
+
+func testName(t time.Time) string {
+	return t.Format("15:04:05") // time package: https://pkg.go.dev/time#pkg-constants
 }
