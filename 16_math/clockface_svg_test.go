@@ -8,7 +8,7 @@ import (
 
 func TestDevideZero(t *testing.T) { // https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#floats-are-horrible and https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#a-note-on-dividing-by-zero
 	t.Logf("30 / (float64(zero())): %v", 30/(float64(zero())))
-	t.Logf("math.Pi / (30/(float64(zero()))): %v", secondsInRadians(simpleTime(0, 0, 0)))
+	t.Logf("math.Pi / (30/(float64(zero()))): %v", SecondsInRadians(simpleTime(0, 0, 0)))
 }
 
 func zero() float64 {
@@ -47,7 +47,7 @@ func TestSecondsInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondsInRadians(c.time)
+			got := SecondsInRadians(c.time)
 			if !roughlyEqualFloat64(got, c.angle) {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
@@ -85,7 +85,7 @@ func TestMinutesInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := minutesInRadians(c.time)
+			got := MinutesInRadians(c.time)
 			if !roughlyEqualFloat64(got, c.angle) {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
@@ -125,7 +125,7 @@ func TestHoursInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := hoursInRadians(c.time)
+			got := HoursInRadians(c.time)
 			if !roughlyEqualFloat64(got, c.angle) {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}

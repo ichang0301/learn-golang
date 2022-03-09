@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	svg "github.com/ichang0301/learn-golang/16_maths/svg"
+	svg "github.com/ichang0301/learn-golang/16_math/svg"
 )
 
 type SVG struct { // to make a struct to unmarshall XML: https://www.onlinetool.io/xmltogo/

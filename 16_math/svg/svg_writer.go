@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	clockface_svg "github.com/ichang0301/learn-golang/16_maths"
+	clockface_svg "github.com/ichang0301/learn-golang/16_math"
 )
 
 const (

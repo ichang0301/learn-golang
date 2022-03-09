@@ -17,7 +17,7 @@ import (
 	mock "github.com/ichang0301/learn-golang/09_mocking"
 	synchronize "github.com/ichang0301/learn-golang/13_sync"
 	roman_numeral "github.com/ichang0301/learn-golang/15_roman-numerals"
-	clockface_svg "github.com/ichang0301/learn-golang/16_maths"
+	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
 )
 
 func main() {
