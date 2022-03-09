@@ -79,5 +79,6 @@ func main() {
 	fmt.Println(roman_numeral.ConvertToArabic("MCMLXXXIV"))
 
 	t := time.Now()
+	fmt.Println(t)
 	clockface_svg.SVGWriter(os.Stdout, t)
 }
