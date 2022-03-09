@@ -1,6 +1,6 @@
 // Acceptance test: Not just a test that tells you that a particular function is working in the way you expect, but a test that tells you that the whole thing you're trying to achieve - the 'feature' - is complete. These tests are sometimes called 'acceptance tests', sometimes called 'feature test'.
 
-package clockface_svg_test
+package svg_test
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	clockface_svg "github.com/ichang0301/learn-golang/16_maths"
+	svg "github.com/ichang0301/learn-golang/16_maths/svg"
 )
 
 type SVG struct { // to make a struct to unmarshall XML: https://www.onlinetool.io/xmltogo/
@@ -53,7 +53,7 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface_svg.SVGWriter(&b, c.time)
+			svg.SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -83,7 +83,7 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface_svg.SVGWriter(&b, c.time)
+			svg.SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -113,7 +113,7 @@ func TestSVGWriterHourHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface_svg.SVGWriter(&b, c.time)
+			svg.SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)

@@ -1,9 +1,11 @@
-package clockface_svg
+package svg
 
 import (
 	"fmt"
 	"io"
 	"time"
+
+	clockface_svg "github.com/ichang0301/learn-golang/16_maths"
 )
 
 const (
@@ -36,22 +38,22 @@ func SVGWriter(w io.Writer, t time.Time) {
 // secondHand is the unit vector of the second hand of an analogue clock at time `t`
 // represented as a Point.
 func secondHand(w io.Writer, t time.Time) {
-	p := makeHand(secondHandPoint(t), secondHandLength)
+	p := makeHand(clockface_svg.SecondHandPoint(t), secondHandLength)
 	fmt.Fprintf(w, `<line x1="%d" y1="%d" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, clockCentreX, clockCentreY, p.X, p.Y)
 }
 
 func minuteHand(w io.Writer, t time.Time) {
-	p := makeHand(minuteHandPoint(t), minuteHandLength)
+	p := makeHand(clockface_svg.MinuteHandPoint(t), minuteHandLength)
 	fmt.Fprintf(w, `<line x1="%d" y1="%d" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, clockCentreX, clockCentreY, p.X, p.Y)
 }
 
 func hourHand(w io.Writer, t time.Time) {
-	p := makeHand(hourHandPoint(t), hourHandLength)
+	p := makeHand(clockface_svg.HourHandPoint(t), hourHandLength)
 	fmt.Fprintf(w, `<line x1="%d" y1="%d" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, clockCentreX, clockCentreY, p.X, p.Y)
 }
 
-func makeHand(p Point, length float64) Point {
-	p = Point{p.X * length, p.Y * length}                // scale
-	p = Point{p.X, -p.Y}                                 // flip
-	return Point{p.X + clockCentreX, p.Y + clockCentreY} // translate
+func makeHand(p clockface_svg.Point, length float64) clockface_svg.Point {
+	p = clockface_svg.Point{X: p.X * length, Y: p.Y * length}                // scale
+	p = clockface_svg.Point{X: p.X, Y: -p.Y}                                 // flip
+	return clockface_svg.Point{X: p.X + clockCentreX, Y: p.Y + clockCentreY} // translate
 }

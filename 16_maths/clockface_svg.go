@@ -7,37 +7,55 @@ import (
 	"time"
 )
 
-// A Point represents a two dimensional Cartesian coordinate
+const (
+	secondsInHalfClock = 30
+	secondsInClock     = 2 * secondsInHalfClock
+	minutesInHalfClock = 30
+	minutesInClock     = 2 * minutesInHalfClock
+	hoursInHalfClock   = 6
+	hoursInClock       = 2 * hoursInHalfClock
+)
+
+// A Point is a Cartesian coordinate. They are used in the package.
+// to represent the unit vector from the origin of a clock hand.
 type Point struct {
 	X float64
 	Y float64
 }
 
-func secondHandPoint(t time.Time) Point {
-	return angleToPoint(secondsInRadians(t))
+// SecondsInRadians returns the angle of the second hand from 12 o'clock in radians.
+func SecondsInRadians(t time.Time) float64 {
+	return (math.Pi / (secondsInHalfClock / float64(t.Second())))
 }
 
-func secondsInRadians(t time.Time) float64 {
-	// return float64(t.Second()) * (math.Pi / 30) // By dividing math.Pi by 30 and then by multiplying it by 30 we've ended up with a number that's no longer the same as math.Pi.
-	return (math.Pi / (30 / (float64(t.Second()))))
+// SecondHandPoint is the unit vector of the second hand at time `t`,.
+// represented a Point.
+func SecondHandPoint(t time.Time) Point {
+	return angleToPoint(SecondsInRadians(t))
 }
 
-func minuteHandPoint(t time.Time) Point {
-	return angleToPoint(minutesInRadians(t))
+// MinutesInRadians returns the angle of the minute hand from 12 o'clock in radians.
+func MinutesInRadians(t time.Time) float64 {
+	return (SecondsInRadians(t) / minutesInClock) +
+		(math.Pi / (minutesInHalfClock / float64(t.Minute())))
 }
 
-func minutesInRadians(t time.Time) float64 {
-	return (secondsInRadians(t) / 60) +
-		(math.Pi / (30 / float64(t.Minute())))
+// MinuteHandPoint is the unit vector of the minute hand at time `t`,.
+// represented a Point.
+func MinuteHandPoint(t time.Time) Point {
+	return angleToPoint(MinutesInRadians(t))
 }
 
-func hourHandPoint(t time.Time) Point {
-	return angleToPoint(hoursInRadians(t))
+// HoursInRadians returns the angle of the hour hand from 12 o'clock in radians.
+func HoursInRadians(t time.Time) float64 {
+	return (MinutesInRadians(t) / hoursInClock) +
+		(math.Pi / (hoursInHalfClock / float64(t.Hour()%hoursInClock)))
 }
 
-func hoursInRadians(t time.Time) float64 {
-	return (minutesInRadians(t) / 12) +
-		(math.Pi / (6 / float64(t.Hour()%12)))
+// HourHandPoint is the unit vector of the hour hand at time `t`,.
+// represented a Point.
+func HourHandPoint(t time.Time) Point {
+	return angleToPoint(HoursInRadians(t))
 }
 
 func angleToPoint(angle float64) Point {
