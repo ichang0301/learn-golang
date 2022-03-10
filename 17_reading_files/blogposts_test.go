@@ -15,7 +15,8 @@ func TestPostsFromFS(t *testing.T) {
 		// Given
 		fileSystem := fstest.MapFS{
 			"hello-world.md": {Data: []byte(`Title: Hello, TDD world!
-Description: file content`)},
+Description: file content
+Tags: tdd, go`)},
 			// "hello-go.md":    {Data: []byte("Title: Hello, go!")},
 		}
 
@@ -34,6 +35,7 @@ Description: file content`)},
 		assertPost(t, posts[0], blogposts.Post{
 			Title:       "Hello, TDD world!",
 			Description: "file content",
+			Tags:        []string{"tdd", "go"},
 		})
 	})
 
