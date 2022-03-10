@@ -10,30 +10,31 @@ import (
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 )
 
-func TestBlogPosts(t *testing.T) {
+func TestPostsFromFS(t *testing.T) {
 	t.Run("happy path", func(t *testing.T) {
 		// Given
-		fs := fstest.MapFS{
-			"hello-world.md": {Data: []byte("Title: Hello, TDD world!")},
+		fileSystem := fstest.MapFS{
+			"hello-world.md": {Data: []byte(`Title: Hello, TDD world!
+Description: file content`)},
 			// "hello-go.md":    {Data: []byte("Title: Hello, go!")},
 		}
 
 		// When
-		posts, err := blogposts.PostsFromFS(fs)
+		posts, err := blogposts.PostsFromFS(fileSystem)
 
 		// Then
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if len(posts) != len(fs) {
-			t.Errorf("expected %d posts, got %d posts", len(fs), len(posts))
+		if len(posts) != len(fileSystem) {
+			t.Errorf("expected %d posts, got %d posts", len(fileSystem), len(posts))
 		}
 
-		expectedFirstPost := blogposts.Post{Title: "Hello, TDD world!"}
-		if !reflect.DeepEqual(posts[0], expectedFirstPost) {
-			t.Errorf("got %#v, want %#v", posts[0], expectedFirstPost)
-		}
+		assertPost(t, posts[0], blogposts.Post{
+			Title:       "Hello, TDD world!",
+			Description: "file content",
+		})
 	})
 
 	t.Run("failing fs", func(t *testing.T) {
@@ -44,9 +45,16 @@ func TestBlogPosts(t *testing.T) {
 	})
 }
 
+func assertPost(t *testing.T, got, want blogposts.Post) {
+	t.Helper()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %#v, want %#v", got, want)
+	}
+}
+
 type FailingFS struct {
 }
 
-func (f FailingFS) Open(name string) (fs.File, error) {
+func (f FailingFS) Open(_ string) (fs.File, error) {
 	return nil, errors.New("this function always fail")
 }
