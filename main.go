@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sync"
 	"time"
@@ -18,6 +19,7 @@ import (
 	synchronize "github.com/ichang0301/learn-golang/13_sync"
 	roman_numeral "github.com/ichang0301/learn-golang/15_roman_numerals"
 	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
+	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 )
 
 func main() {
@@ -108,4 +110,11 @@ func main() {
 	}
 	defer f.Close()
 	clockface_svg.SVGWriter(f, t)
+
+	// 17_reading_files
+	posts, err := blogposts.PostsFromFS(os.DirFS("17_reading_files/input"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(posts)
 }
