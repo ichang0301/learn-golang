@@ -21,7 +21,7 @@ type Post struct {
 	Body        string
 }
 
-func newPost(blogFile io.Reader) Post {
+func getPost(blogFile io.Reader) (Post, error) {
 	scanner := bufio.NewScanner(blogFile)
 
 	readline := func(prefix string) string {
@@ -39,7 +39,7 @@ func newPost(blogFile io.Reader) Post {
 		Description: description,
 		Tags:        tags,
 		Body:        body,
-	}
+	}, nil
 }
 
 func readBody(scanner *bufio.Scanner) string {
