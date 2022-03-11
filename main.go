@@ -96,17 +96,17 @@ func main() {
 	fmt.Println(t)
 	const mathResultDirectoryPath = "16_math/result/"
 	if err := os.MkdirAll(mathResultDirectoryPath, 0755); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	const mathResultFileName = "clockface.svg"
 	const mathResultFilePath = mathResultDirectoryPath + mathResultFileName
 	if err := os.WriteFile(mathResultFilePath, []byte(""), 0644); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	f, err := os.OpenFile(mathResultFilePath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer f.Close()
 	clockface_svg.SVGWriter(f, t)
