@@ -5,14 +5,14 @@
 package blogrenderer
 
 import (
+	"embed"
 	"html/template"
 	"io"
 )
 
-const (
-	postTemplate = `<h1>{{.Title}}</h1>
-<p>{{.Description}}</p>
-Tags: <ul>{{range .Tags}}<li>{{.}}</li>{{end}}</ul>` // .Title == post.Title, The templating language is very similar to Mustache. Mastache: https://mustache.github.io/
+var (
+	//go:embed "templates/*"
+	postTemplates embed.FS // Go source files that import "embed" can use the '//go:embed pattern' directive to initialize a variable of type string, []byte, or FS with the contents of files read from the package directory or subdirectories at compile time. 'embed' documantation: https://pkg.go.dev/embed
 )
 
 type Post struct {
@@ -21,7 +21,7 @@ type Post struct {
 }
 
 func Render(w io.Writer, post Post) error {
-	templ, err := template.New("blog").Parse(postTemplate)
+	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
 	if err != nil {
 		return err
 	}
