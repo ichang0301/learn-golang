@@ -1,8 +1,18 @@
+// https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/html-templates
+
+// 'text/template' documantation: https://pkg.go.dev/text/template
+
 package blogrenderer
 
 import (
-	"fmt"
+	"html/template"
 	"io"
+)
+
+const (
+	postTemplate = `<h1>{{.Title}}</h1>
+<p>{{.Description}}</p>
+Tags: <ul>{{range .Tags}}<li>{{.}}</li>{{end}}</ul>` // .Title == post.Title, The templating language is very similar to Mustache. Mastache: https://mustache.github.io/
 )
 
 type Post struct {
@@ -11,22 +21,14 @@ type Post struct {
 }
 
 func Render(w io.Writer, post Post) error {
-	if _, err := fmt.Fprintf(w, "<h1>%s</h1>\n", post.Title); err != nil {
+	templ, err := template.New("blog").Parse(postTemplate)
+	if err != nil {
 		return err
 	}
-	if _, err := fmt.Fprintf(w, "<p>%s</p>\n", post.Description); err != nil {
+
+	if err := templ.Execute(w, post); err != nil {
 		return err
 	}
-	if _, err := fmt.Fprint(w, "Tags: <ul>"); err != nil {
-		return err
-	}
-	for _, tag := range post.Tags {
-		if _, err := fmt.Fprintf(w, "<li>%s</li>", tag); err != nil {
-			return err
-		}
-	}
-	if _, err := fmt.Fprint(w, "</ul>"); err != nil {
-		return err
-	}
+
 	return nil
 }
