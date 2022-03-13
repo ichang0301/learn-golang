@@ -2,6 +2,8 @@
 
 // 'text/template' documantation: https://pkg.go.dev/text/template
 
+// approval test: https://approvaltests.com/
+
 package blogrenderer
 
 import (
