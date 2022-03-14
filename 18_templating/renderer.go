@@ -1,5 +1,7 @@
 // https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/html-templates
 
+// hotwire: https://hotwired.dev/ (e.g. https://github.com/wolfeidau/hotwire-golang-website)
+
 // 'text/template' documantation: https://pkg.go.dev/text/template
 
 // approval test: https://approvaltests.com/
