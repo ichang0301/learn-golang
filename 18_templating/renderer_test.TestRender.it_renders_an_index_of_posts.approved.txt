@@ -19,7 +19,7 @@
 </nav>
 <main>
 
-<ol><li><a href="/post/hello-world">Hello World</a></li><li><a href="/post/hello-world-2">Hello World 2</a></li></ol>
+<ol><li><a href="/post/hello-world">hello world</a></li><li><a href="/post/hello-world2">hello world2</a></li></ol>
 
 </main>
 <footer>
