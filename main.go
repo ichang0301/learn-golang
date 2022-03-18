@@ -124,12 +124,21 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, post := range posts {
-		fmt.Println(templatingPosts.Render(os.Stdout, templating.Post{
-			Title:       post.Title,
-			Body:        post.Body,
-			Description: post.Description,
-			Tags:        post.Tags,
-		}))
+
+	convertedPosts := []templating.Post{
+		{
+			Title:       posts[0].Title,
+			Body:        posts[0].Body,
+			Description: posts[0].Description,
+			Tags:        posts[0].Tags,
+		},
+		{
+			Title:       posts[1].Title,
+			Body:        posts[1].Body,
+			Description: posts[1].Description,
+			Tags:        posts[1].Tags,
+		},
 	}
+	fmt.Println(templatingPosts.Render(os.Stdout, convertedPosts[0]))
+	fmt.Println(templatingPosts.RenderIndex(os.Stdout, convertedPosts))
 }
