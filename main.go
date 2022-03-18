@@ -20,6 +20,7 @@ import (
 	roman_numeral "github.com/ichang0301/learn-golang/15_roman_numerals"
 	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
+	templating "github.com/ichang0301/learn-golang/18_templating"
 )
 
 func main() {
@@ -117,4 +118,18 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(posts)
+
+	// 18_templating
+	templatingPosts, err := templating.NewPostRenderer()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, post := range posts {
+		fmt.Println(templatingPosts.Render(os.Stdout, templating.Post{
+			Title:       post.Title,
+			Body:        post.Body,
+			Description: post.Description,
+			Tags:        post.Tags,
+		}))
+	}
 }
