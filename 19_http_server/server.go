@@ -4,13 +4,29 @@ package http_server
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
-func PlayerServer(w http.ResponseWriter, r *http.Request) { // Handler documentation: https://pkg.go.dev/net/http#Handler
-	switch r.URL.Path {
-	case "/players/Pepper":
-		fmt.Fprint(w, "20") // ResponseWriter also implements io Writer so we can use fmt.Fprint to send strings as HTTP responses.
-	case "/players/Floyd":
-		fmt.Fprint(w, "10") // ResponseWriter also implements io Writer so we can use fmt.Fprint to send strings as HTTP responses.
+type PlayerStore interface {
+	GetPlayerScore(name string) int
+}
+
+type PlayerServer struct {
+	Store PlayerStore
+}
+
+func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) { // The Handler interface is what we need to implement in order to make a server, and the HandlerFunc type is an adapter to allow the use of ordinary functions as HTTP handlers. HandlerFunc documentation: https://pkg.go.dev/net/http#HandlerFunc and Handler documentation: https://pkg.go.dev/net/http#Handler
+	player := strings.TrimPrefix(r.URL.Path, "/players/")
+
+	fmt.Fprint(w, p.Store.GetPlayerScore(player)) // ResponseWriter also implements io Writer so we can use fmt.Fprint to send strings as HTTP responses.
+}
+
+func GetPlayerScore(name string) int {
+	switch name {
+	case "Pepper":
+		return 20
+	case "Floyd":
+		return 10
 	}
+	return 0
 }

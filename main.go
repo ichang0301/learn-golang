@@ -145,6 +145,13 @@ func main() {
 	fmt.Println(templatingPosts.RenderIndex(os.Stdout, convertedPosts))
 
 	// 19_http_server
-	handler := http.HandlerFunc(http_server.PlayerServer) // The Handler interface is what we need to implement in order to make a server, and the HandlerFunc type is an adapter to allow the use of ordinary functions as HTTP handlers. HandlerFunc documentation: https://pkg.go.dev/net/http#HandlerFunc
-	log.Fatal(http.ListenAndServe(":5000", handler))      //  ListenAndServe takes a port to listen on a Handler. If there is a problem the web server will return an error, an example of that might be the port already being listened to. For that reason we wrap the call in log.Fatal to log the error to the user. ListenAndServe documentation: https://pkg.go.dev/net/http#ListenAndServe
+	server := &http_server.PlayerServer{Store: &InMemoryPlayerStore{}}
+	log.Fatal(http.ListenAndServe(":5000", server)) //  ListenAndServe takes a port to listen on a Handler. If there is a problem the web server will return an error, an example of that might be the port already being listened to. For that reason we wrap the call in log.Fatal to log the error to the user. ListenAndServe documentation: https://pkg.go.dev/net/http#ListenAndServe
+}
+
+// 19_http_server
+type InMemoryPlayerStore struct{}
+
+func (i *InMemoryPlayerStore) GetPlayerScore(name string) int {
+	return 123
 }
