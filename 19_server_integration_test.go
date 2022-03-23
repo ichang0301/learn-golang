@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 
 	http_server "github.com/ichang0301/learn-golang/19_http_server"
@@ -13,15 +14,23 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	store := NewInMemoryPlayerStore()
 	server := http_server.PlayerServer{Store: store}
 	player := "Pepper"
+	wantedCount := 1000
 
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	var wg sync.WaitGroup
+	wg.Add(wantedCount)
+
+	for i := 0; i < wantedCount; i++ {
+		go func() {
+			server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+			wg.Done()
+		}()
+	}
+	wg.Wait()
 
 	response := httptest.NewRecorder()
 	server.ServeHTTP(response, newGetScoreRequest(player))
 	assertStatus(t, response.Code, http.StatusOK)
-	assertResponseBody(t, response.Body.String(), "3")
+	assertResponseBody(t, response.Body.String(), "1000")
 }
 
 func newGetScoreRequest(name string) *http.Request {
