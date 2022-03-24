@@ -22,7 +22,9 @@ import (
 	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 	templating "github.com/ichang0301/learn-golang/18_templating"
-	http_server "github.com/ichang0301/learn-golang/19_http_server"
+
+	// http_server "github.com/ichang0301/learn-golang/19_http_server"
+	http_server_json "github.com/ichang0301/learn-golang/20_json"
 )
 
 func main() {
@@ -145,6 +147,10 @@ func main() {
 	fmt.Println(templatingPosts.RenderIndex(os.Stdout, convertedPosts))
 
 	// 19_http_server
-	server := &http_server.PlayerServer{Store: http_server.NewInMemoryPlayerStore()}
-	log.Fatal(http.ListenAndServe(":5000", server)) //  ListenAndServe takes a port to listen on a Handler. If there is a problem the web server will return an error, an example of that might be the port already being listened to. For that reason we wrap the call in log.Fatal to log the error to the user. ListenAndServe documentation: https://pkg.go.dev/net/http#ListenAndServe
+	// server := &http_server.PlayerServer{Store: http_server.NewInMemoryPlayerStore()}
+	// log.Fatal(http.ListenAndServe(":5000", server)) //  ListenAndServe takes a port to listen on a Handler. If there is a problem the web server will return an error, an example of that might be the port already being listened to. For that reason we wrap the call in log.Fatal to log the error to the user. ListenAndServe documentation: https://pkg.go.dev/net/http#ListenAndServe
+
+	// 20_json
+	server := &http_server_json.PlayerServer{Store: http_server_json.NewInMemoryPlayerStore()}
+	log.Fatal(http.ListenAndServe(":5000", server))
 }
