@@ -1,5 +1,7 @@
 // https://quii.gitbook.io/learn-go-with-tests/build-an-application/json
 
+// Embedding (Effective Go): https://golang.org/doc/effective_go.html#embedding
+
 package http_server_json
 
 import (
