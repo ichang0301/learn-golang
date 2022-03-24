@@ -1,9 +1,11 @@
 package http_server_json
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 )
 
@@ -98,6 +100,18 @@ func TestLeague(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assertStatus(t, response.Code, http.StatusOK)
+
+		var got []Player
+		if err := json.NewDecoder(response.Body).Decode(&got); err != nil {
+			t.Fatalf("Unable to parse response from server %q into slice of Player: %v", response.Body, err)
+		}
+
+		want := []Player{
+			{Name: "Chris", Wins: 20},
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v but wanted %v", got, want)
+		}
 	})
 }
 
