@@ -1,7 +1,7 @@
 package http_server_json
 
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
-	return &InMemoryPlayerStore{map[string]int{}}
+	return &InMemoryPlayerStore{store: map[string]int{}}
 }
 
 type InMemoryPlayerStore struct {
