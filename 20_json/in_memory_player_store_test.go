@@ -3,6 +3,7 @@ package http_server_json
 import (
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 )
 
@@ -19,5 +20,5 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	response := httptest.NewRecorder()
 	server.ServeHTTP(response, newGetScoreRequest(player))
 	assertStatus(t, response.Code, http.StatusOK)
-	assertResponseBody(t, response.Body.String(), "3")
+	assertResponseBody(t, response.Body.String(), strconv.Itoa(3))
 }

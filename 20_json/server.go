@@ -17,12 +17,15 @@ type Player struct {
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
+	GetLeague() []Player
 }
 
 type PlayerServer struct {
 	store        PlayerStore
 	http.Handler // Caution: embedded http.ServeMux instead (the concrete type) it would still work but users of PlayerServer would be able to add new routes to our server because Handle(path, handler) would be public.
 }
+
+const jsonContentType = "application/json"
 
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	p := new(PlayerServer)
@@ -37,17 +40,8 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	leagueTable := p.getLeagueTable()
-	json.NewEncoder(w).Encode(leagueTable)
-
-	w.WriteHeader(http.StatusOK)
-}
-
-func (p *PlayerServer) getLeagueTable() []Player {
-	leagueTable := []Player{
-		{"Chris", 20},
-	}
-	return leagueTable
+	w.Header().Set("content-type", jsonContentType)
+	json.NewEncoder(w).Encode(p.store.GetLeague())
 }
 
 func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
