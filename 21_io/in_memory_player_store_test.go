@@ -29,12 +29,12 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newLeagueRequest())
 
-		var got []Player
+		var got League
 		if err := json.NewDecoder(response.Body).Decode(&got); err != nil {
 			t.Fatal(err)
 		}
 
 		assertStatus(t, response.Code, http.StatusOK)
-		assertLeague(t, got, []Player{{Name: "Pepper", Wins: 3}})
+		assertLeague(t, got, League{{Name: "Pepper", Wins: 3}})
 	})
 }
