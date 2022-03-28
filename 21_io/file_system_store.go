@@ -8,7 +8,7 @@ import (
 
 // FileSystemPlayerStore stores score information about players in file
 type FileSystemPlayerStore struct {
-	database io.ReadWriteSeeker // io.ReadSeeker is embedding io.Reader and io.Seeker interface
+	Database io.ReadWriteSeeker // io.ReadSeeker is embedding io.Reader and io.Seeker interface
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
@@ -30,14 +30,14 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		league = append(league, Player{name, 1})
 	}
 
-	f.database.Seek(0, 0)
-	json.NewEncoder(f.database).Encode(&league)
+	f.Database.Seek(0, 0)
+	json.NewEncoder(f.Database).Encode(&league)
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
-	if _, err := f.database.Seek(0, io.SeekStart); err != nil { // go back to the start.
+	if _, err := f.Database.Seek(0, io.SeekStart); err != nil { // go back to the start.
 		log.Fatal(err)
 	}
-	league, _ := NewLeague(f.database) // TODO: handle error
+	league, _ := NewLeague(f.Database) // TODO: handle error
 	return league
 }
