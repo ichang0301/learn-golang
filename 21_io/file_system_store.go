@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 )
 
 // FileSystemPlayerStore stores score information about players in file
@@ -66,5 +67,8 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
+	sort.Slice(f.league, func(i, j int) bool { // documantation: https://pkg.go.dev/sort#Slice
+		return f.league[i].Wins > f.league[j].Wins
+	})
 	return f.league
 }
