@@ -2,6 +2,7 @@ package http_server_io
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -11,13 +12,36 @@ type FileSystemPlayerStore struct {
 	league   League
 }
 
-func NewFileSystemPlayerStore(file *os.File) *FileSystemPlayerStore {
-	file.Seek(0, 0) // go back to the start.
-	league, _ := NewLeague(file)
+func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
+	if err := initialisePlayerDBFile(file); err != nil {
+		return nil, fmt.Errorf("problem initialising player db file, %v", err)
+	}
+
+	league, err := NewLeague(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem loading player store from file %s, %v", file.Name(), err)
+	}
+
 	return &FileSystemPlayerStore{
 		Database: json.NewEncoder(&tape{file}),
 		league:   league,
+	}, nil
+}
+
+func initialisePlayerDBFile(file *os.File) error {
+	file.Seek(0, 0) // go back to the start.
+
+	info, err := file.Stat()
+	if err != nil {
+		return fmt.Errorf("problem getting file info from file %s, %v", file.Name(), err)
 	}
+
+	if info.Size() == 0 {
+		file.Write([]byte("[]"))
+		file.Seek(0, 0)
+	}
+
+	return nil
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
