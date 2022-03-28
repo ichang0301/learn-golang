@@ -13,6 +13,7 @@ type FileSystemPlayerStore struct {
 	league   League
 }
 
+// NewFileSystemPlayerStore creates an FileSystemPlayerStore that implements the PlayerStore interface
 func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 	if err := initialisePlayerDBFile(file); err != nil {
 		return nil, fmt.Errorf("problem initialising player db file, %v", err)
