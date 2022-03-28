@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -24,7 +25,8 @@ import (
 	templating "github.com/ichang0301/learn-golang/18_templating"
 
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
-	http_server_json "github.com/ichang0301/learn-golang/20_json"
+	// http_server_json "github.com/ichang0301/learn-golang/20_json"
+	http_server_io "github.com/ichang0301/learn-golang/21_io"
 )
 
 func main() {
@@ -151,6 +153,26 @@ func main() {
 	// log.Fatal(http.ListenAndServe(":5000", server)) //  ListenAndServe takes a port to listen on a Handler. If there is a problem the web server will return an error, an example of that might be the port already being listened to. For that reason we wrap the call in log.Fatal to log the error to the user. ListenAndServe documentation: https://pkg.go.dev/net/http#ListenAndServe
 
 	// 20_json
-	server := http_server_json.NewPlayerServer(http_server_json.NewInMemoryPlayerStore())
-	log.Fatal(http.ListenAndServe(":5000", server))
+	// server := http_server_json.NewPlayerServer(http_server_json.NewInMemoryPlayerStore())
+	// log.Fatal(http.ListenAndServe(":5000", server))
+
+	// 21_io
+	const ioResultDirectoryPath = "21_io/result/"
+	if err := os.MkdirAll(ioResultDirectoryPath, 0755); err != nil {
+		log.Fatal(err)
+	}
+	const dbFileName = "game.db.json"
+	db, err := os.OpenFile(filepath.Join(ioResultDirectoryPath, dbFileName), os.O_RDWR|os.O_CREATE, 0666) // The 2nd argument to os.OpenFile lets you define the permissions for opening the file, in our case O_RDWR means we want to read and write and os.O_CREATE means create the file if it doesn't exist.
+	if err != nil {
+		log.Fatalf("problem opening %s %v", dbFileName, err)
+	}
+
+	store, err := http_server_io.NewFileSystemPlayerStore(db)
+	if err != nil {
+		log.Fatalf("problem creating file system player store, %v", err)
+	}
+	server := http_server_io.NewPlayerServer(store)
+	if err := http.ListenAndServe(":5000", server); err != nil {
+		log.Fatalf("could not listen on port 5000 %v", err)
+	}
 }
