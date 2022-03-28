@@ -2,20 +2,20 @@ package http_server_io
 
 import (
 	"encoding/json"
-	"io"
+	"os"
 )
 
 // FileSystemPlayerStore stores score information about players in file
 type FileSystemPlayerStore struct {
-	Database io.ReadWriteSeeker // io.ReadSeeker is embedding io.Reader, io.Writer and io.Seeker interface
+	Database *json.Encoder
 	league   League
 }
 
-func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
-	database.Seek(0, 0) // go back to the start.
-	league, _ := NewLeague(database)
+func NewFileSystemPlayerStore(file *os.File) *FileSystemPlayerStore {
+	file.Seek(0, 0) // go back to the start.
+	league, _ := NewLeague(file)
 	return &FileSystemPlayerStore{
-		Database: database,
+		Database: json.NewEncoder(&tape{file}),
 		league:   league,
 	}
 }
@@ -38,7 +38,7 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		f.league = append(f.league, Player{name, 1})
 	}
 
-	json.NewEncoder(f.Database).Encode(&f.league)
+	f.Database.Encode(&f.league)
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {

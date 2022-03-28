@@ -1,7 +1,6 @@
 package http_server_io
 
 import (
-	"io"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -86,7 +85,7 @@ func TestFileSystemStore(t *testing.T) {
 	})
 }
 
-func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
+func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	t.Helper()
 
 	tmpfile, err := ioutil.TempFile("", "db")
