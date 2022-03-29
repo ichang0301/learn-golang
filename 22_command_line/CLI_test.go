@@ -1,13 +1,30 @@
 package command_line
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestCLI(t *testing.T) {
-	playerStore := &StubPlayerStore{}
-	cli := &CLI{playerStore}
-	cli.PlayPoker()
+	t.Run("record Chris win from user input", func(t *testing.T) {
+		in := strings.NewReader("Chris wins\n")
+		playerStore := &StubPlayerStore{}
 
-	if len(playerStore.winCalls) != 1 {
-		t.Fatal("expected a win call but didn't get any")
-	}
+		cli := &CLI{playerStore, in}
+		cli.PlayPoker()
+
+		player := "Chris"
+		AssertPlayerWin(t, playerStore, player)
+	})
+
+	t.Run("record Cleo win from user input", func(t *testing.T) {
+		in := strings.NewReader("Cleo wins\n")
+		playerStore := &StubPlayerStore{}
+
+		cli := &CLI{playerStore, in}
+		cli.PlayPoker()
+
+		player := "Cleo"
+		AssertPlayerWin(t, playerStore, player)
+	})
 }
