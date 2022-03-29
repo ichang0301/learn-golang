@@ -182,19 +182,29 @@ func main() {
 		log.Fatal(err)
 	}
 	const dbFileName = "game.db.json"
+	filePath := filepath.Join(ioResultDirectoryPath, dbFileName)
 
+	// ================== start of cli application code ==================
 	fmt.Println("Let's play poker: Type '{Name} wins' to record a win")
-
-	db, err := os.OpenFile(filepath.Join(ioResultDirectoryPath, dbFileName), os.O_RDWR|os.O_CREATE, 0666)
+	store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
 	if err != nil {
-		log.Fatalf("problem opening %s %v", dbFileName, err)
+		log.Fatal(err)
 	}
+	defer close()
 
-	store, err := poker.NewFileSystemPlayerStore(db)
-	if err != nil {
-		log.Fatalf("problem creating file system player store, %v ", err)
-	}
+	poker.NewCLI(store, os.Stdin).PlayPoker()
+	// ================== end of cli application code ==================
 
-	game := poker.NewCLI(store, os.Stdin)
-	game.PlayPoker()
+	// ================== start of web-server application code ==================
+	// store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer close()
+
+	// server := poker.NewPlayerServer(store)
+	// if err := http.ListenAndServe(":5000", server); err != nil {
+	// 	log.Fatalf("could not listen on port 5000 %v", err)
+	// }
+	// ================== end of web-server application code ==================
 }
