@@ -1,30 +1,32 @@
-package command_line
+package command_line_test
 
 import (
 	"strings"
 	"testing"
+
+	poker "github.com/ichang0301/learn-golang/22_command_line"
 )
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
-		playerStore := &StubPlayerStore{}
+		store := &poker.StubPlayerStore{}
 
-		cli := &CLI{playerStore, in}
+		cli := poker.NewCLI(store, in)
 		cli.PlayPoker()
 
 		player := "Chris"
-		AssertPlayerWin(t, playerStore, player)
+		poker.AssertPlayerWin(t, store, player)
 	})
 
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
-		playerStore := &StubPlayerStore{}
+		store := &poker.StubPlayerStore{}
 
-		cli := &CLI{playerStore, in}
+		cli := poker.NewCLI(store, in)
 		cli.PlayPoker()
 
 		player := "Cleo"
-		AssertPlayerWin(t, playerStore, player)
+		poker.AssertPlayerWin(t, store, player)
 	})
 }
