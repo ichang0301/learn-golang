@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 	"sync"
@@ -26,7 +25,8 @@ import (
 
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
-	http_server_io "github.com/ichang0301/learn-golang/21_io"
+	// http_server_io "github.com/ichang0301/learn-golang/21_io"
+	poker "github.com/ichang0301/learn-golang/22_command_line"
 )
 
 func main() {
@@ -157,22 +157,54 @@ func main() {
 	// log.Fatal(http.ListenAndServe(":5000", server))
 
 	// 21_io
-	const ioResultDirectoryPath = "21_io/result/"
+	// const ioResultDirectoryPath = "21_io/result/"
+	// if err := os.MkdirAll(ioResultDirectoryPath, 0755); err != nil {
+	// 	log.Fatal(err)
+	// }
+	// const dbFileName = "game.db.json"
+	// db, err := os.OpenFile(filepath.Join(ioResultDirectoryPath, dbFileName), os.O_RDWR|os.O_CREATE, 0666) // The 2nd argument to os.OpenFile lets you define the permissions for opening the file, in our case O_RDWR means we want to read and write and os.O_CREATE means create the file if it doesn't exist.
+	// if err != nil {
+	// 	log.Fatalf("problem opening %s %v", dbFileName, err)
+	// }
+
+	// store, err := http_server_io.NewFileSystemPlayerStore(db)
+	// if err != nil {
+	// 	log.Fatalf("problem creating file system player store, %v", err)
+	// }
+	// server := http_server_io.NewPlayerServer(store)
+	// if err := http.ListenAndServe(":5000", server); err != nil {
+	// 	log.Fatalf("could not listen on port 5000 %v", err)
+	// }
+
+	// 22_command_line
+	const ioResultDirectoryPath = "22_command_line/result/"
 	if err := os.MkdirAll(ioResultDirectoryPath, 0755); err != nil {
 		log.Fatal(err)
 	}
 	const dbFileName = "game.db.json"
-	db, err := os.OpenFile(filepath.Join(ioResultDirectoryPath, dbFileName), os.O_RDWR|os.O_CREATE, 0666) // The 2nd argument to os.OpenFile lets you define the permissions for opening the file, in our case O_RDWR means we want to read and write and os.O_CREATE means create the file if it doesn't exist.
-	if err != nil {
-		log.Fatalf("problem opening %s %v", dbFileName, err)
-	}
+	filePath := filepath.Join(ioResultDirectoryPath, dbFileName)
 
-	store, err := http_server_io.NewFileSystemPlayerStore(db)
+	// ================== start of cli application code ==================
+	fmt.Println("Let's play poker: Type '{Name} wins' to record a win")
+	store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
 	if err != nil {
-		log.Fatalf("problem creating file system player store, %v", err)
+		log.Fatal(err)
 	}
-	server := http_server_io.NewPlayerServer(store)
-	if err := http.ListenAndServe(":5000", server); err != nil {
-		log.Fatalf("could not listen on port 5000 %v", err)
-	}
+	defer close()
+
+	poker.NewCLI(store, os.Stdin).PlayPoker()
+	// ================== end of cli application code ==================
+
+	// ================== start of web-server application code ==================
+	// store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer close()
+
+	// server := poker.NewPlayerServer(store)
+	// if err := http.ListenAndServe(":5000", server); err != nil {
+	// 	log.Fatalf("could not listen on port 5000 %v", err)
+	// }
+	// ================== end of web-server application code ==================
 }
