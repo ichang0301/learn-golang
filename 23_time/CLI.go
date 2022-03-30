@@ -9,29 +9,28 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"time"
 )
 
-const PlayerPrompt = "Please enter the number of players: "
-
+// CLI helps players through a game of poker.
 type CLI struct {
-	store   PlayerStore
-	in      *bufio.Scanner
-	out     io.Writer
-	alerter BlindAlerter
+	in   *bufio.Scanner
+	out  io.Writer
+	game *Game
 }
 
-// NewCLI creates an CLI
-func NewCLI(store PlayerStore, in io.Reader, out io.Writer, alerter BlindAlerter) *CLI {
+// NewCLI creates a CLI for playing poker.
+func NewCLI(in io.Reader, out io.Writer, game *Game) *CLI {
 	return &CLI{
-		store:   store,
-		in:      bufio.NewScanner(in),
-		out:     out,
-		alerter: alerter,
+		in:   bufio.NewScanner(in),
+		out:  out,
+		game: game,
 	}
 }
 
-// PlayPoker input '{player name} wins' from user and record win in CLI.store
+// PlayerPrompt is the text asking the user for the number of players.
+const PlayerPrompt = "Please enter the number of players: "
+
+// PlayPoker starts to play the game.
 func (cli *CLI) PlayPoker() {
 	fmt.Fprint(cli.out, PlayerPrompt)
 	numberOfPlayers, err := strconv.Atoi(cli.readLine())
@@ -39,28 +38,18 @@ func (cli *CLI) PlayPoker() {
 		log.Fatalf("please enter the 'number', %+v", err)
 	}
 
-	cli.scheduleBlindAlerts(numberOfPlayers)
+	cli.game.Start(numberOfPlayers)
 
-	text := cli.readLine()
-	cli.store.RecordWin(extractWinner(text)) // `Scanner.Text()` return the string the scanner read to.
-}
-
-func (cli *CLI) scheduleBlindAlerts(numberOfPlayers int) {
-	blindIncrement := time.Duration(5+numberOfPlayers) * time.Minute
-
-	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
-	blindTime := 0 * time.Second
-	for _, blind := range blinds {
-		cli.alerter.ScheduleAlertAt(blindTime, blind)
-		blindTime = blindTime + blindIncrement
-	}
+	winnerInput := cli.readLine()
+	winner := extractWinner(winnerInput)
+	cli.game.Finish(winner)
 }
 
 func (cli *CLI) readLine() string {
-	cli.in.Scan() // `Scanner.Scan()` will read up to a newline.
+	cli.in.Scan()
 	return cli.in.Text()
 }
 
 func extractWinner(userInput string) string {
-	return strings.Replace(userInput, " wins", "", 1) // documantation: https://pkg.go.dev/strings#Replace
+	return strings.Replace(userInput, " wins", "", 1)
 }
