@@ -16,6 +16,7 @@ func TestWalk(t *testing.T) {
 		Profile Profile
 	}
 
+	// Table-based test
 	cases := []struct {
 		Name          string
 		Input         interface{}
