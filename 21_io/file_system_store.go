@@ -9,7 +9,7 @@ import (
 
 // FileSystemPlayerStore stores score information about players in file
 type FileSystemPlayerStore struct {
-	Database *json.Encoder
+	Database *json.Encoder // When you rely on global variables responsibilities become very unclear.
 	league   League
 }
 
