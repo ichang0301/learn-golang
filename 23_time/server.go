@@ -1,4 +1,4 @@
-// https://quii.gitbook.io/learn-go-with-tests/build-an-application/command-line
+// https://quii.gitbook.io/learn-go-with-tests/build-an-application/time
 
 package command_line_time
 
