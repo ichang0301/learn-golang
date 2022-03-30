@@ -73,12 +73,32 @@ func TestCLI(t *testing.T) {
 		assertGameNotStarted(t, game)
 		assertMessagesSentToUser(t, stdout, poker.PlayerPrompt, poker.BadPlayerInputErrMsg)
 	})
+
+	t.Run("it prints an error when the winner is declared incorrectly", func(t *testing.T) {
+		game := &GameSpy{}
+		stdout := &bytes.Buffer{}
+
+		in := userSends("8", "Lloyd is a killer")
+		cli := poker.NewCLI(in, stdout, game)
+
+		cli.PlayPoker()
+
+		assertGameNotFinished(t, game)
+		assertMessagesSentToUser(t, stdout, poker.PlayerPrompt, poker.BadWinnerInputMsg)
+	})
 }
 
 func assertGameStartedWith(t testing.TB, game *GameSpy, numberOfPlayersWanted int) {
 	t.Helper()
 	if game.StartCalledWith != numberOfPlayersWanted {
 		t.Errorf("wanted Start called with %d but got %d", numberOfPlayersWanted, game.StartCalledWith)
+	}
+}
+
+func assertGameNotFinished(t testing.TB, game *GameSpy) {
+	t.Helper()
+	if game.FinishCalled {
+		t.Errorf("game should not have finished")
 	}
 }
 
