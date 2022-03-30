@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -35,7 +34,8 @@ func (cli *CLI) PlayPoker() {
 	fmt.Fprint(cli.out, PlayerPrompt)
 	numberOfPlayers, err := strconv.Atoi(cli.readLine())
 	if err != nil {
-		log.Fatalf("please enter the 'number', %+v", err)
+		fmt.Fprintf(cli.out, "please enter the 'number', %+v", err)
+		return
 	}
 
 	cli.game.Start(numberOfPlayers)

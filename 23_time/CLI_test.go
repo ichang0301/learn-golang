@@ -2,6 +2,7 @@ package command_line_time_test
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -14,11 +15,13 @@ var (
 )
 
 type GameSpy struct {
+	StartCalled  bool
 	StartedWith  int
 	FinishedWith string
 }
 
 func (g *GameSpy) Start(numberOfPlayers int) {
+	g.StartCalled = true
 	g.StartedWith = numberOfPlayers
 }
 
@@ -68,6 +71,26 @@ func TestCLI(t *testing.T) {
 
 		if game.FinishedWith != "Cleo" {
 			t.Errorf("expected finish called with 'Cleo' but got %q", game.FinishedWith)
+		}
+	})
+
+	t.Run("it prints an error when a non numeric value is entered and does not start the game", func(t *testing.T) {
+		player := "Pies"
+		stdout := &bytes.Buffer{}
+		in := strings.NewReader(fmt.Sprintln(player))
+		game := &GameSpy{}
+
+		cli := poker.NewCLI(in, stdout, game)
+		cli.PlayPoker()
+
+		if game.StartCalled {
+			t.Errorf("game should not have started")
+		}
+
+		gotPrompt := stdout.String()
+		wantPrompt := fmt.Sprintf("%splease enter the 'number', strconv.Atoi: parsing \"%s\": invalid syntax", poker.PlayerPrompt, player)
+		if gotPrompt != wantPrompt {
+			t.Errorf("got %q, want %q", gotPrompt, wantPrompt)
 		}
 	})
 }
