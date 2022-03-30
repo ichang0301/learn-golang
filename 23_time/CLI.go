@@ -26,15 +26,17 @@ func NewCLI(in io.Reader, out io.Writer, game Game) *CLI {
 	}
 }
 
-// PlayerPrompt is the text asking the user for the number of players.
-const PlayerPrompt = "Please enter the number of players: "
+const (
+	PlayerPrompt         = "Please enter the number of players: "                                     // PlayerPrompt is the text asking the user for the number of players.
+	BadPlayerInputErrMsg = "Bad value received for number of players, please try again with a number" // BadPlayerInputErrMsg is the text telling the user they did bad things.
+)
 
 // PlayPoker starts to play the game.
 func (cli *CLI) PlayPoker() {
 	fmt.Fprint(cli.out, PlayerPrompt)
 	numberOfPlayers, err := strconv.Atoi(cli.readLine())
 	if err != nil {
-		fmt.Fprintf(cli.out, "please enter the 'number', %+v", err)
+		fmt.Fprint(cli.out, BadPlayerInputErrMsg)
 		return
 	}
 
