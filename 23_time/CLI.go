@@ -6,23 +6,31 @@ import (
 	"bufio"
 	"io"
 	"strings"
+	"time"
 )
 
+type BlindAlerter interface {
+	ScheduleAlertAt(duration time.Duration, amount int)
+}
+
 type CLI struct {
-	store PlayerStore
-	in    *bufio.Scanner
+	store   PlayerStore
+	in      *bufio.Scanner
+	alerter BlindAlerter
 }
 
 // NewCLI creates an CLI
-func NewCLI(store PlayerStore, in io.Reader) *CLI {
+func NewCLI(store PlayerStore, in io.Reader, alerter BlindAlerter) *CLI {
 	return &CLI{
-		store: store,
-		in:    bufio.NewScanner(in),
+		store:   store,
+		in:      bufio.NewScanner(in),
+		alerter: alerter,
 	}
 }
 
 // PlayPoker input '{player name} wins' from user and record win in CLI.store
 func (cli *CLI) PlayPoker() {
+	cli.alerter.ScheduleAlertAt(5*time.Second, 100)
 	text := cli.readLine()
 	cli.store.RecordWin(extractWinner(text)) // `Scanner.Text()` return the string the scanner read to.
 }
