@@ -1,12 +1,20 @@
 package command_line_time_test
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 	"testing"
 	"time"
 
 	poker "github.com/ichang0301/learn-golang/23_time"
+)
+
+var (
+	dummyBlindAlerter = &SpyBlindAlerter{}
+	dummyPlayerStore  = &poker.StubPlayerStore{}
+	dummyStdIn        = &bytes.Buffer{}
+	dummyStdOut       = &bytes.Buffer{}
 )
 
 type scheduledAlert struct {
@@ -30,9 +38,8 @@ func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
 		store := &poker.StubPlayerStore{}
-		dummySpyAlerter := &SpyBlindAlerter{}
 
-		cli := poker.NewCLI(store, in, dummySpyAlerter)
+		cli := poker.NewCLI(store, in, dummyStdOut, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		player := "Chris"
@@ -42,9 +49,8 @@ func TestCLI(t *testing.T) {
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
 		store := &poker.StubPlayerStore{}
-		dummySpyAlerter := &SpyBlindAlerter{}
 
-		cli := poker.NewCLI(store, in, dummySpyAlerter)
+		cli := poker.NewCLI(store, in, dummyStdOut, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		player := "Cleo"
@@ -52,11 +58,9 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("it schedules printing of blind values", func(t *testing.T) {
-		in := strings.NewReader("Chris wins\n")
-		playerStore := &poker.StubPlayerStore{}
 		blindAlerter := &SpyBlindAlerter{}
 
-		cli := poker.NewCLI(playerStore, in, blindAlerter)
+		cli := poker.NewCLI(dummyPlayerStore, dummyStdIn, dummyStdOut, blindAlerter)
 		cli.PlayPoker()
 
 		cases := []scheduledAlert{
@@ -82,6 +86,18 @@ func TestCLI(t *testing.T) {
 				got := blindAlerter.alerts[i]
 				assertScheduledAlert(t, got, want)
 			})
+		}
+	})
+
+	t.Run("it prompts the user to enter the number of players", func(t *testing.T) {
+		stdout := &bytes.Buffer{}
+		cli := poker.NewCLI(dummyPlayerStore, dummyStdIn, stdout, dummyBlindAlerter)
+		cli.PlayPoker()
+
+		got := stdout.String()
+
+		if got != poker.PlayerPrompt {
+			t.Errorf("got %q, want %q", got, poker.PlayerPrompt)
 		}
 	})
 }

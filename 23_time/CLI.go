@@ -4,28 +4,34 @@ package command_line_time
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strings"
 	"time"
 )
 
+const PlayerPrompt = "Please enter the number of players: "
+
 type CLI struct {
 	store   PlayerStore
 	in      *bufio.Scanner
+	out     io.Writer
 	alerter BlindAlerter
 }
 
 // NewCLI creates an CLI
-func NewCLI(store PlayerStore, in io.Reader, alerter BlindAlerter) *CLI {
+func NewCLI(store PlayerStore, in io.Reader, out io.Writer, alerter BlindAlerter) *CLI {
 	return &CLI{
 		store:   store,
 		in:      bufio.NewScanner(in),
+		out:     out,
 		alerter: alerter,
 	}
 }
 
 // PlayPoker input '{player name} wins' from user and record win in CLI.store
 func (cli *CLI) PlayPoker() {
+	fmt.Fprint(cli.out, PlayerPrompt)
 	cli.scheduleBlindAlerts()
 	text := cli.readLine()
 	cli.store.RecordWin(extractWinner(text)) // `Scanner.Text()` return the string the scanner read to.
