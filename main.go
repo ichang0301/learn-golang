@@ -26,7 +26,8 @@ import (
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
 	// http_server_io "github.com/ichang0301/learn-golang/21_io"
-	poker "github.com/ichang0301/learn-golang/22_command_line"
+	// poker "github.com/ichang0301/learn-golang/22_command_line"
+	poker "github.com/ichang0301/learn-golang/23_time"
 )
 
 func main() {
@@ -177,14 +178,45 @@ func main() {
 	// }
 
 	// 22_command_line
-	const ioResultDirectoryPath = "22_command_line/result/"
+	// const ioResultDirectoryPath = "22_command_line/result/"
+	// if err := os.MkdirAll(ioResultDirectoryPath, 0755); err != nil {
+	// 	log.Fatal(err)
+	// }
+	// const dbFileName = "game.db.json"
+	// filePath := filepath.Join(ioResultDirectoryPath, dbFileName)
+
+	// // ================== start of cli application code ==================
+	// fmt.Println("Let's play poker: Type '{Name} wins' to record a win")
+	// store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer close()
+
+	// poker.NewCLI(store, os.Stdin).PlayPoker()
+	// // ================== end of cli application code ==================
+
+	// // ================== start of web-server application code ==================
+	// // store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
+	// // if err != nil {
+	// // 	log.Fatal(err)
+	// // }
+	// // defer close()
+
+	// // server := poker.NewPlayerServer(store)
+	// // if err := http.ListenAndServe(":5000", server); err != nil {
+	// // 	log.Fatalf("could not listen on port 5000 %v", err)
+	// // }
+	// // ================== end of web-server application code ==================
+
+	// 23_time
+	const ioResultDirectoryPath = "23_time/result/"
 	if err := os.MkdirAll(ioResultDirectoryPath, 0755); err != nil {
 		log.Fatal(err)
 	}
 	const dbFileName = "game.db.json"
 	filePath := filepath.Join(ioResultDirectoryPath, dbFileName)
 
-	// ================== start of cli application code ==================
 	fmt.Println("Let's play poker: Type '{Name} wins' to record a win")
 	store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
 	if err != nil {
@@ -192,19 +224,6 @@ func main() {
 	}
 	defer close()
 
-	poker.NewCLI(store, os.Stdin).PlayPoker()
-	// ================== end of cli application code ==================
-
-	// ================== start of web-server application code ==================
-	// store, close, err := poker.FileSystemPlayerStoreFromFile(filePath)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer close()
-
-	// server := poker.NewPlayerServer(store)
-	// if err := http.ListenAndServe(":5000", server); err != nil {
-	// 	log.Fatalf("could not listen on port 5000 %v", err)
-	// }
-	// ================== end of web-server application code ==================
+	game := poker.NewTexasHoldem(poker.BlindAlerterFunc(poker.StdOutAlerter), store)
+	poker.NewCLI(os.Stdin, os.Stdout, game).PlayPoker()
 }
