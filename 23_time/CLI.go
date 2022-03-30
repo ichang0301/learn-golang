@@ -15,11 +15,11 @@ import (
 type CLI struct {
 	in   *bufio.Scanner
 	out  io.Writer
-	game *TexasHoldem
+	game Game
 }
 
 // NewCLI creates a CLI for playing poker.
-func NewCLI(in io.Reader, out io.Writer, game *TexasHoldem) *CLI {
+func NewCLI(in io.Reader, out io.Writer, game Game) *CLI {
 	return &CLI{
 		in:   bufio.NewScanner(in),
 		out:  out,

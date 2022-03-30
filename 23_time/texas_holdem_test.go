@@ -8,6 +8,28 @@ import (
 	poker "github.com/ichang0301/learn-golang/23_time"
 )
 
+var (
+	dummyPlayerStore  = &poker.StubPlayerStore{}
+	dummyBlindAlerter = &SpyBlindAlerter{}
+)
+
+type scheduledAlert struct {
+	at     time.Duration
+	amount int
+}
+
+func (s scheduledAlert) String() string {
+	return fmt.Sprintf("%d chips at %v", s.amount, s.at)
+}
+
+type SpyBlindAlerter struct {
+	alerts []scheduledAlert
+}
+
+func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int) {
+	s.alerts = append(s.alerts, scheduledAlert{at, amount})
+}
+
 func TestGame_Start(t *testing.T) {
 	t.Run("schedules alerts on game start for 5 players", func(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
@@ -68,5 +90,17 @@ func checkSchedulingCases(cases []scheduledAlert, t *testing.T, blindAlerter *Sp
 			got := blindAlerter.alerts[i]
 			assertScheduledAlert(t, got, want)
 		})
+	}
+}
+
+func assertScheduledAlert(t testing.TB, got, want scheduledAlert) {
+	t.Helper()
+
+	if got.amount != want.amount {
+		t.Errorf("got amount %d, want %d", got.amount, want.amount)
+	}
+
+	if got.at != want.at {
+		t.Errorf("got scheduled time of %v, want %v", got.at, want.at)
 	}
 }
