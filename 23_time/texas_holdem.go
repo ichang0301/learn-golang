@@ -2,22 +2,22 @@ package command_line_time
 
 import "time"
 
-// Game manages the state of a game.
-type Game struct {
+// TexasHoldem manages the state of a game.
+type TexasHoldem struct {
 	store   PlayerStore
 	alerter BlindAlerter
 }
 
-// NewGame creates a Game for managing poker.
-func NewGame(alerter BlindAlerter, store PlayerStore) *Game {
-	return &Game{
+// NewTexasHoldem creates a TexasHoldem for managing poker.
+func NewTexasHoldem(alerter BlindAlerter, store PlayerStore) *TexasHoldem {
+	return &TexasHoldem{
 		alerter: alerter,
 		store:   store,
 	}
 }
 
-// Start starts poker with the number of players.
-func (g *Game) Start(numberOfPlayers int) {
+// Start will schedule blind alerts dependant on the number of players.
+func (g *TexasHoldem) Start(numberOfPlayers int) {
 	blindIncrement := time.Duration(5+numberOfPlayers) * time.Minute
 
 	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
@@ -28,7 +28,7 @@ func (g *Game) Start(numberOfPlayers int) {
 	}
 }
 
-// Finish records winner.
-func (p *Game) Finish(winner string) {
+// Finish ends the game, recording the winner.
+func (p *TexasHoldem) Finish(winner string) {
 	p.store.RecordWin(winner)
 }
