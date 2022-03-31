@@ -1,4 +1,4 @@
-package websockets
+package websockets_test
 
 import (
 	"encoding/json"
@@ -6,13 +6,15 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"testing"
+
+	poker "github.com/ichang0301/learn-golang/24_websockets"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, "[]")
 	defer cleanDatabase()
 
-	store, err := NewFileSystemPlayerStore(database)
+	store, err := poker.NewFileSystemPlayerStore(database)
 	assertNoError(t, err)
 
 	server := mustMakePlayerServer(t, store)
@@ -34,12 +36,12 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newLeagueRequest())
 
-		var got League
+		var got poker.League
 		if err := json.NewDecoder(response.Body).Decode(&got); err != nil {
 			t.Fatal(err)
 		}
 
 		assertStatus(t, response, http.StatusOK)
-		assertLeague(t, got, League{{Name: "Pepper", Wins: 3}})
+		assertLeague(t, got, poker.League{{Name: "Pepper", Wins: 3}})
 	})
 }
