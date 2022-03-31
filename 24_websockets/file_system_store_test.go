@@ -1,4 +1,4 @@
-package command_line_time
+package websockets
 
 import (
 	"io/ioutil"

@@ -2,7 +2,7 @@
 
 // WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection. : https://en.wikipedia.org/wiki/WebSocket
 
-package command_line_time
+package websockets
 
 import (
 	"encoding/json"

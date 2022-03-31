@@ -1,4 +1,4 @@
-package command_line_time
+package websockets
 
 // Game manages the state of a game.
 type Game interface {

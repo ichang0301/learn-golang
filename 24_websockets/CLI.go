@@ -1,6 +1,6 @@
 // https://quii.gitbook.io/learn-go-with-tests/build-an-application/websockets
 
-package command_line_time
+package websockets
 
 import (
 	"bufio"

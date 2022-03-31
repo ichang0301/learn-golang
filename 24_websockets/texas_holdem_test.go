@@ -1,11 +1,11 @@
-package command_line_time_test
+package websockets_test
 
 import (
 	"fmt"
 	"testing"
 	"time"
 
-	poker "github.com/ichang0301/learn-golang/23_time"
+	poker "github.com/ichang0301/learn-golang/24_websockets"
 )
 
 var (
