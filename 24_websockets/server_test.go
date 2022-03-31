@@ -95,6 +95,19 @@ func TestLeague(t *testing.T) {
 	})
 }
 
+func TestGame(t *testing.T) {
+	t.Run("GET /game returns 200", func(t *testing.T) {
+		server := NewPlayerServer(&StubPlayerStore{})
+
+		request := newGameRequest()
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assertStatus(t, response, http.StatusOK)
+	})
+}
+
 func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want string) {
 	if response.Result().Header.Get("content-type") != want {
 		t.Errorf("response did not have content-type of %s, got %v", want, response.Result().Header)
@@ -124,6 +137,11 @@ func getLeagueFromResponse(t testing.TB, body io.Reader) (league League) {
 	}
 
 	return
+}
+
+func newGameRequest() *http.Request {
+	request, _ := http.NewRequest(http.MethodGet, "/game", nil)
+	return request
 }
 
 func assertStatus(t testing.TB, got *httptest.ResponseRecorder, want int) {

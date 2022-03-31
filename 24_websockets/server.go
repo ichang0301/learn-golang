@@ -5,6 +5,7 @@ package command_line_time
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strings"
 )
@@ -38,6 +39,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	router := http.NewServeMux()
 	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
 	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
+	router.Handle("/game", http.HandlerFunc(p.game))
 	p.Handler = router
 
 	return p
@@ -57,6 +59,19 @@ func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		p.showScore(w, player)
 	}
+}
+
+// we're not going to write a test. : https://quii.gitbook.io/learn-go-with-tests/build-an-application/websockets#how-do-we-test-we-return-the-correct-markup
+func (p *PlayerServer) game(w http.ResponseWriter, r *http.Request) {
+	const directory = "24_websockets"
+	tmpl, err := template.ParseFiles(directory + "/game.html")
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("problem loading template %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	tmpl.Execute(w, nil)
 }
 
 func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {
