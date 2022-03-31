@@ -1,5 +1,7 @@
 // https://quii.gitbook.io/learn-go-with-tests/build-an-application/websockets
 
+// WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection. : https://en.wikipedia.org/wiki/WebSocket
+
 package command_line_time
 
 import (
@@ -8,6 +10,8 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/websocket" // documantation: https://pkg.go.dev/github.com/gorilla/websocket
 )
 
 // PlayerStore stores score information about players
@@ -40,6 +44,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
 	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
 	router.Handle("/game", http.HandlerFunc(p.game))
+	router.Handle("/ws", http.HandlerFunc(p.webSocket))
 	p.Handler = router
 
 	return p
@@ -72,6 +77,16 @@ func (p *PlayerServer) game(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.Execute(w, nil)
+}
+
+func (p *PlayerServer) webSocket(w http.ResponseWriter, r *http.Request) {
+	upgrader := websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+	conn, _ := upgrader.Upgrade(w, r, nil)
+	_, winnerMsg, _ := conn.ReadMessage()
+	p.store.RecordWin(string(winnerMsg))
 }
 
 func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {
