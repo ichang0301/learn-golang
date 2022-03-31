@@ -31,14 +31,25 @@ type Player struct {
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
+	template *template.Template
 }
 
-const jsonContentType = "application/json"
+const (
+	jsonContentType    = "application/json"
+	templatesDirectory = "templates"
+	htmlTemplatePath   = templatesDirectory + "/game.html"
+)
 
 // NewPlayerServer creates a PlayerServer with routing configured
-func NewPlayerServer(store PlayerStore) *PlayerServer {
+func NewPlayerServer(store PlayerStore) (*PlayerServer, error) {
 	p := new(PlayerServer)
 	p.store = store
+
+	tmpl, err := template.ParseFiles(htmlTemplatePath)
+	if err != nil {
+		return nil, fmt.Errorf("problem opening %s, %v", htmlTemplatePath, err)
+	}
+	p.template = tmpl
 
 	router := http.NewServeMux()
 	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
@@ -47,7 +58,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	router.Handle("/ws", http.HandlerFunc(p.webSocket))
 	p.Handler = router
 
-	return p
+	return p, nil
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
@@ -68,23 +79,16 @@ func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 
 // we're not going to write a test. : https://quii.gitbook.io/learn-go-with-tests/build-an-application/websockets#how-do-we-test-we-return-the-correct-markup
 func (p *PlayerServer) game(w http.ResponseWriter, r *http.Request) {
-	const directory = "24_websockets"
-	tmpl, err := template.ParseFiles(directory + "/game.html")
+	p.template.Execute(w, nil)
+}
 
-	if err != nil {
-		http.Error(w, fmt.Sprintf("problem loading template %s", err.Error()), http.StatusInternalServerError)
-		return
-	}
-
-	tmpl.Execute(w, nil)
+var wsUpgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 func (p *PlayerServer) webSocket(w http.ResponseWriter, r *http.Request) {
-	upgrader := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	conn, _ := upgrader.Upgrade(w, r, nil)
+	conn, _ := wsUpgrader.Upgrade(w, r, nil)
 	_, winnerMsg, _ := conn.ReadMessage()
 	p.store.RecordWin(string(winnerMsg))
 }

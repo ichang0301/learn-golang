@@ -13,8 +13,62 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+func newGetScoreRequest(name string) *http.Request {
+	request, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/players/%s", name), nil)
+	return request
+}
+
+func newPostWinRequest(name string) *http.Request {
+	request, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
+	return request
+}
+
+func newLeagueRequest() *http.Request {
+	req, _ := http.NewRequest(http.MethodGet, "/league", nil)
+	return req
+}
+
+func getLeagueFromResponse(t testing.TB, body io.Reader) (league League) {
+	t.Helper()
+	league, err := NewLeague(body)
+	if err != nil {
+		t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", body, err)
+	}
+
+	return
+}
+
+func newGameRequest() *http.Request {
+	request, _ := http.NewRequest(http.MethodGet, "/game", nil)
+	return request
+}
+
+func mustMakePlayerServer(t *testing.T, store PlayerStore) *PlayerServer {
+	server, err := NewPlayerServer(store)
+	if err != nil {
+		t.Fatal("problem creating player server", err)
+	}
+	return server
+}
+
+func mustDialWS(t *testing.T, url string) *websocket.Conn {
+	ws, _, err := websocket.DefaultDialer.Dial(url, nil) // Using `websocket.DefaultDialer.Dial` we try to dial in to our server and then we'll try and send a message with our winner.
+	if err != nil {
+		t.Fatalf("could not open a ws connection on %s %v", url, err)
+	}
+
+	return ws
+}
+
+func writeWSMessage(t testing.TB, conn *websocket.Conn, message string) {
+	t.Helper()
+	if err := conn.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
+		t.Fatalf("could not send message over ws connection %v", err)
+	}
+}
+
 func TestGETPlayers(t *testing.T) {
-	store := StubPlayerStore{
+	store := &StubPlayerStore{
 		scores: map[string]int{
 			"Pepper": 20,
 			"Floyd":  10,
@@ -22,7 +76,10 @@ func TestGETPlayers(t *testing.T) {
 		winCalls: nil,
 		league:   nil,
 	}
-	server := NewPlayerServer(&store)
+	server, err := NewPlayerServer(store)
+	if err != nil {
+		t.Fatalf("failed to create constructor for PlayerServer, %v", err)
+	}
 
 	t.Run("returns Pepper's score", func(t *testing.T) {
 		request := newGetScoreRequest("Pepper")
@@ -60,7 +117,7 @@ func TestStoreWins(t *testing.T) {
 		winCalls: nil,
 		league:   nil,
 	}
-	server := NewPlayerServer(store)
+	server := mustMakePlayerServer(t, store)
 
 	t.Run("it returns accepted on POST", func(t *testing.T) {
 		player := "Pepper"
@@ -83,9 +140,8 @@ func TestLeague(t *testing.T) {
 			{"Tiest", 14},
 		}
 
-		store := StubPlayerStore{nil, nil, wantedLeague}
-		server := NewPlayerServer(&store)
-
+		store := &StubPlayerStore{nil, nil, wantedLeague}
+		server := mustMakePlayerServer(t, store)
 		request := newLeagueRequest()
 		response := httptest.NewRecorder()
 
@@ -101,7 +157,8 @@ func TestLeague(t *testing.T) {
 
 func TestGame(t *testing.T) {
 	t.Run("GET /game returns 200", func(t *testing.T) {
-		server := NewPlayerServer(&StubPlayerStore{})
+		store := &StubPlayerStore{}
+		server := mustMakePlayerServer(t, store)
 
 		request := newGameRequest()
 		response := httptest.NewRecorder()
@@ -114,20 +171,16 @@ func TestGame(t *testing.T) {
 	t.Run("when we get a message over a websocket it is a winner of a game", func(t *testing.T) {
 		store := &StubPlayerStore{}
 		winner := "Ruth"
-		server := httptest.NewServer(NewPlayerServer(store))
+		playerServer := mustMakePlayerServer(t, store)
+
+		server := httptest.NewServer(playerServer)
 		defer server.Close()
 
 		wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws"
-
-		ws, _, err := websocket.DefaultDialer.Dial(wsURL, nil) // Using `websocket.DefaultDialer.Dial` we try to dial in to our server and then we'll try and send a message with our winner.
-		if err != nil {
-			t.Fatalf("could not open a ws connection on %s %v", wsURL, err)
-		}
+		ws := mustDialWS(t, wsURL)
 		defer ws.Close()
 
-		if err := ws.WriteMessage(websocket.TextMessage, []byte(winner)); err != nil {
-			t.Fatalf("could not send message over ws connection %v", err)
-		}
+		writeWSMessage(t, ws, winner)
 
 		time.Sleep(10 * time.Millisecond)
 		AssertPlayerWin(t, store, winner)
@@ -138,36 +191,6 @@ func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want s
 	if response.Result().Header.Get("content-type") != want {
 		t.Errorf("response did not have content-type of %s, got %v", want, response.Result().Header)
 	}
-}
-
-func newGetScoreRequest(name string) *http.Request {
-	request, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/players/%s", name), nil)
-	return request
-}
-
-func newPostWinRequest(name string) *http.Request {
-	request, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
-	return request
-}
-
-func newLeagueRequest() *http.Request {
-	req, _ := http.NewRequest(http.MethodGet, "/league", nil)
-	return req
-}
-
-func getLeagueFromResponse(t testing.TB, body io.Reader) (league League) {
-	t.Helper()
-	league, err := NewLeague(body)
-	if err != nil {
-		t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", body, err)
-	}
-
-	return
-}
-
-func newGameRequest() *http.Request {
-	request, _ := http.NewRequest(http.MethodGet, "/game", nil)
-	return request
 }
 
 func assertStatus(t testing.TB, got *httptest.ResponseRecorder, want int) {
