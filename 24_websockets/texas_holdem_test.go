@@ -2,6 +2,8 @@ package websockets_test
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
 	"testing"
 	"time"
 
@@ -26,7 +28,7 @@ type SpyBlindAlerter struct {
 	alerts []scheduledAlert
 }
 
-func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int) {
+func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int, to io.Writer) {
 	s.alerts = append(s.alerts, scheduledAlert{at, amount})
 }
 
@@ -35,7 +37,7 @@ func TestGame_Start(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
 		game := poker.NewTexasHoldem(blindAlerter, dummyPlayerStore)
 
-		game.Start(5)
+		game.Start(5, ioutil.Discard)
 
 		cases := []scheduledAlert{
 			{0 * time.Second, 100},
@@ -58,7 +60,7 @@ func TestGame_Start(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
 		game := poker.NewTexasHoldem(blindAlerter, dummyPlayerStore)
 
-		game.Start(7)
+		game.Start(7, ioutil.Discard)
 
 		cases := []scheduledAlert{
 			{0 * time.Second, 100},
