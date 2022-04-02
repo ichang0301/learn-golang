@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -92,6 +91,14 @@ func NewPlayerServer(store PlayerStore, game Game) (*PlayerServer, error) {
 	return p, nil
 }
 
+func (w *playerServerWS) Write(p []byte) (n int, err error) {
+	if err = w.WriteMessage(websocket.TextMessage, p); err != nil {
+		return 0, err
+	}
+
+	return len(p), nil
+}
+
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", jsonContentType)
 	json.NewEncoder(w).Encode(p.store.GetLeague())
@@ -123,7 +130,7 @@ func (p *PlayerServer) webSocket(w http.ResponseWriter, r *http.Request) {
 
 	numberOfPlayersMsg := ws.WaitForMsg()
 	numberOfPlayers, _ := strconv.Atoi(numberOfPlayersMsg)
-	p.game.Start(numberOfPlayers, ioutil.Discard) //todo: Don't discard the blinds messages!
+	p.game.Start(numberOfPlayers, ws)
 
 	winner := ws.WaitForMsg()
 	p.game.Finish(winner)
