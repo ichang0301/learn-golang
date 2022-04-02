@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 	"testing"
+	"time"
 
 	poker "github.com/ichang0301/learn-golang/24_websockets"
 )
@@ -12,6 +13,10 @@ import (
 var (
 	dummyStdIn  = &bytes.Buffer{}
 	dummyStdOut = &bytes.Buffer{}
+)
+
+const (
+	fiveHundredMS = 500 * time.Millisecond
 )
 
 type GameSpy struct {
@@ -36,6 +41,16 @@ func (g *GameSpy) Finish(winner string) {
 
 func userSends(messages ...string) *strings.Reader { // Variadic functions can be called with any number of trailing arguments.
 	return strings.NewReader(strings.Join(messages, "\n"))
+}
+
+func retryUntil(d time.Duration, f func() bool) bool {
+	deadline := time.Now().Add(d)
+	for time.Now().Before(deadline) {
+		if f() {
+			return true
+		}
+	}
+	return false
 }
 
 func TestCLI(t *testing.T) {
@@ -94,7 +109,10 @@ func TestCLI(t *testing.T) {
 
 func assertGameStartedWith(t testing.TB, game *GameSpy, numberOfPlayersWanted int) {
 	t.Helper()
-	if game.StartCalledWith != numberOfPlayersWanted {
+
+	if passed := retryUntil(fiveHundredMS, func() bool {
+		return game.StartCalledWith == numberOfPlayersWanted
+	}); !passed {
 		t.Errorf("wanted Start called with %d but got %d", numberOfPlayersWanted, game.StartCalledWith)
 	}
 }
@@ -108,7 +126,10 @@ func assertGameNotFinished(t testing.TB, game *GameSpy) {
 
 func assertFinishCalledWith(t testing.TB, game *GameSpy, winner string) {
 	t.Helper()
-	if game.FinishCalledWith != winner {
+
+	if passed := retryUntil(fiveHundredMS, func() bool {
+		return game.FinishCalledWith == winner
+	}); !passed {
 		t.Errorf("expected finish called with %q but got %q", winner, game.FinishCalledWith)
 	}
 }
