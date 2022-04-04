@@ -1,3 +1,5 @@
+// https://quii.gitbook.io/learn-go-with-tests/questions-and-answers/error-types
+
 package error_types
 
 import (
