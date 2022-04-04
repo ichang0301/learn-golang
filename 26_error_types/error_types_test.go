@@ -1,6 +1,7 @@
 package error_types
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -19,8 +20,10 @@ func TestDumbGetter(t *testing.T) {
 		}
 
 		want := BadStatusError{URL: svr.URL, Status: http.StatusTeapot}
-		got, isStatusErr := err.(BadStatusError)
-		if !isStatusErr {
+		var got BadStatusError
+
+		isBadStatusError := errors.As(err, &got) // errors.As to try and extract our error into our custom type. It returns a bool to denote success and extracts it into got for us. go blog about errors.Is and errors.As (>= go 1.13) : https://go.dev/blog/go1.13-errors
+		if !isBadStatusError {
 			t.Fatalf("was not a BadStatusError, got %T", err)
 		}
 
