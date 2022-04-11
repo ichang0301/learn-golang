@@ -4,17 +4,27 @@
 
 package why
 
+import "fmt"
+
 func Hello(name, language string) string {
+	return fmt.Sprintf(
+		"%s, %s",
+		greeting(language),
+		name,
+	)
+}
 
-	if language == "es" {
-		return "Hola, " + name
+var greetings = map[string]string{
+	"es": "Hola",
+	"fr": "Bonjour",
+}
+
+func greeting(language string) string {
+	greeting, exists := greetings[language]
+
+	if exists {
+		return greeting
 	}
 
-	if language == "fr" {
-		return "Bonjour, " + name
-	}
-
-	// imagine dozens more languages
-
-	return "Hello, " + name
+	return "Hello"
 }
