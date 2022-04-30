@@ -41,7 +41,7 @@ func BubbleSort(list interface{}) (result interface{}, pass int, err error) { //
 			for i := pass; i < length; i++ {
 				if !isSorted {
 					isSorted = true
-					for j := pass; j < length-1; j++ {
+					for j := 0; j < length-1; j++ {
 						if sortedList[j] > sortedList[j+1] {
 							tmp := sortedList[j+1]
 							sortedList[j+1] = sortedList[j]
@@ -66,7 +66,7 @@ func BubbleSort(list interface{}) (result interface{}, pass int, err error) { //
 			for i := pass; i < length; i++ {
 				if !isSorted {
 					isSorted = true
-					for j := pass; j < length-1; j++ {
+					for j := 0; j < length-1; j++ {
 						if strings.Compare(sortedList[j], sortedList[j+1]) > 0 {
 							tmp := sortedList[j+1]
 							sortedList[j+1] = sortedList[j]

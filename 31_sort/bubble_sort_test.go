@@ -6,6 +6,14 @@ import (
 	"testing"
 )
 
+func TestSort(t *testing.T) {
+	b := BubbleSortAlgorithm{}
+	got, err := b.Sort([]int{3, 2, 1})
+
+	assertList(t, 0, got, []int{1, 2, 3})
+	assertError(t, 0, err, nil)
+}
+
 func TestBubbleSort(t *testing.T) {
 	t.Run("test to sort numbers", func(t *testing.T) {
 		testCases := []struct {
@@ -17,6 +25,7 @@ func TestBubbleSort(t *testing.T) {
 			{unSortedList: []int{}, expectedSortedList: []int{}, expetedPass: 0, err: fmt.Errorf("empty slice/array can't sorted")},
 			{unSortedList: []int{1, 2}, expectedSortedList: []int{1, 2}, expetedPass: 1},
 			{unSortedList: []int{1, 3, 2}, expectedSortedList: []int{1, 2, 3}, expetedPass: 2},
+			{unSortedList: []int{3, 2, 1}, expectedSortedList: []int{1, 2, 3}, expetedPass: 3},
 			{unSortedList: []int{10, 1, 3, 2, 5, 9, 4, 7, 8, 6}, expectedSortedList: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, expetedPass: 5},
 		}
 
@@ -72,16 +81,11 @@ func TestBubbleSort(t *testing.T) {
 func assertError(t testing.TB, i int, got, want error) {
 	t.Helper()
 
-	if got == nil && want == nil {
-		t.Skip()
-	}
-
 	if (got == nil && want != nil) || (got != nil && want == nil) {
-		t.Errorf("[#%d] got error: %v, but want: %v", i, got, want)
-		t.FailNow()
+		t.Fatalf("[#%d] got error: %v, but want: %v", i, got, want)
 	}
 
-	if got.Error() != want.Error() {
+	if !(got == nil && want == nil) && (got.Error() != want.Error()) {
 		t.Errorf("[#%d] got error context: %q, but want: %q", i, got.Error(), want.Error())
 	}
 }
