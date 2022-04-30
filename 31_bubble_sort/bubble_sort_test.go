@@ -25,6 +25,25 @@ func TestBubbleSort(t *testing.T) {
 			assertPass(t, i, pass, testCase.expetedPass)
 		}
 	})
+
+	t.Run("test to sort alphabets", func(t *testing.T) {
+		testCases := []struct {
+			unSortedList       []string
+			expectedSortedList []string
+			expetedPass        int
+		}{
+			{unSortedList: []string{}, expectedSortedList: []string{}, expetedPass: 0},
+			{unSortedList: []string{"apple", "dog"}, expectedSortedList: []string{"apple", "dog"}, expetedPass: 1},
+			{unSortedList: []string{"apple", "dog", "banana"}, expectedSortedList: []string{"apple", "banana", "dog"}, expetedPass: 2},
+		}
+
+		for i, testCase := range testCases {
+			got, pass := BubbleSort(testCase.unSortedList)
+
+			assertList(t, i, got, testCase.expectedSortedList)
+			assertPass(t, i, pass, testCase.expetedPass)
+		}
+	})
 }
 
 func assertList(t testing.TB, i, got, want interface{}) {

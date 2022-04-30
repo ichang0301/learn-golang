@@ -6,6 +6,7 @@ package bubble_sort
 
 import (
 	"reflect"
+	"strings"
 )
 
 // BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
@@ -22,9 +23,9 @@ func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how 
 		}
 
 		switch l.Index(0).Type().Kind() {
+		// sort the list of integer type
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 			var sortedList []int
-
 			for i := 0; i < length; i++ {
 				sortedList = append(sortedList, int(l.Index(i).Int()))
 			}
@@ -47,8 +48,32 @@ func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how 
 			}
 
 			result = sortedList
-		}
+		// sort the list of string type
+		case reflect.String:
+			var sortedList []string
+			for i := 0; i < length; i++ {
+				sortedList = append(sortedList, l.Index(i).String())
+			}
 
+			for i := pass; i < length; i++ {
+				if !isSorted {
+					isSorted = true
+					for j := pass; j < length-1; j++ {
+						if strings.Compare(sortedList[j], sortedList[j+1]) > 0 {
+							tmp := sortedList[j+1]
+							sortedList[j+1] = sortedList[j]
+							sortedList[j] = tmp
+							isSorted = false
+						}
+					}
+				} else {
+					break
+				}
+				pass++
+			}
+
+			result = sortedList
+		}
 	}
 
 	return
