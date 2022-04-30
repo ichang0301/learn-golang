@@ -5,20 +5,20 @@
 package sort
 
 import (
-	"log"
+	"fmt"
 	"reflect"
 	"strings"
 )
 
 type BubbleSortAlgorithm struct{}
 
-func (b BubbleSortAlgorithm) Sort(unSortedList interface{}) (sortedList interface{}) {
-	sortedList, _ = BubbleSort(unSortedList)
+func (b BubbleSortAlgorithm) Sort(unSortedList interface{}) (sortedList interface{}, err error) {
+	sortedList, _, err = BubbleSort(unSortedList)
 	return
 }
 
 // BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
-func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how many times we take of sorting the list using bubble sort algorithm
+func BubbleSort(list interface{}) (result interface{}, pass int, err error) { // pass: how many times we take of sorting the list using bubble sort algorithm
 	var isSorted bool
 	l := reflect.ValueOf(list)
 	result = l.Interface()
@@ -26,6 +26,7 @@ func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how 
 	case reflect.Slice, reflect.Array:
 		length := l.Len()
 		if length == 0 {
+			err = fmt.Errorf("empty slice/array can't sorted")
 			return
 		}
 
@@ -83,11 +84,11 @@ func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how 
 
 		// unsupported type
 		default:
-			log.Printf("Unsupported type %q", l.Index(0).Type().Kind().String())
+			err = fmt.Errorf("unsupported type %q", l.Index(0).Type().Kind().String())
 		}
 	// only supported array/slice type
 	default:
-		log.Printf("Only supported an array/slice type. But entered %q type", reflect.TypeOf(list).Kind().String())
+		err = fmt.Errorf("only supported an array/slice type. But entered %q type", reflect.TypeOf(list).Kind().String())
 	}
 
 	return
