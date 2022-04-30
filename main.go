@@ -21,6 +21,7 @@ import (
 	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 	templating "github.com/ichang0301/learn-golang/18_templating"
+	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
 
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
@@ -274,7 +275,7 @@ func main() {
 	unOrderedIntList := []int{3, 5, 1, 4, 2}
 	unOrderedStringList := []string{"good_morning", "hi", "good_night", "good_afternoon", "hello", "bye"}
 
-	bubbleSortAlgorithm := sort.BubbleSortAlgorithm{}
+	bubbleSortAlgorithm := bubble_sort.BubbleSortAlgorithm{}
 	printOrderedList(bubbleSortAlgorithm, unOrderedIntList)
 	printOrderedList(bubbleSortAlgorithm, unOrderedStringList)
 }
