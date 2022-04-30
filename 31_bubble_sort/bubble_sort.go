@@ -2,13 +2,20 @@
 
 // The bubble sort algorithm has a worst-case time complexity of O(n2). The bubble sort has a space complexity of O(1).
 
-package bubble_sort
+package sort
 
 import (
 	"log"
 	"reflect"
 	"strings"
 )
+
+type BubbleSortAlgorithm struct{}
+
+func (b BubbleSortAlgorithm) Sort(unSortedList interface{}) (sortedList interface{}) {
+	sortedList, _ = BubbleSort(unSortedList)
+	return
+}
 
 // BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
 func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how many times we take of sorting the list using bubble sort algorithm
