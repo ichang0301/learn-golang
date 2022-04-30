@@ -44,6 +44,21 @@ func TestBubbleSort(t *testing.T) {
 			assertPass(t, i, pass, testCase.expetedPass)
 		}
 	})
+
+	t.Run("test to list of unsupported type", func(t *testing.T) {
+		testCases := []struct {
+			given interface{}
+		}{
+			{given: true},
+			{given: []bool{true, false}},
+			{given: []byte("hello")},
+		}
+
+		for i, testCase := range testCases {
+			got, _ := BubbleSort(testCase.given)
+			assertList(t, i, got, testCase.given)
+		}
+	})
 }
 
 func assertList(t testing.TB, i, got, want interface{}) {

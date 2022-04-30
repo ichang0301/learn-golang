@@ -5,6 +5,7 @@
 package bubble_sort
 
 import (
+	"log"
 	"reflect"
 	"strings"
 )
@@ -12,11 +13,10 @@ import (
 // BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
 func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how many times we take of sorting the list using bubble sort algorithm
 	var isSorted bool
+	l := reflect.ValueOf(list)
+	result = l.Interface()
 	switch reflect.TypeOf(list).Kind() {
 	case reflect.Slice, reflect.Array:
-		l := reflect.ValueOf(list)
-		result = l.Interface()
-
 		length := l.Len()
 		if length == 0 {
 			return
@@ -73,7 +73,14 @@ func BubbleSort(list interface{}) (result interface{}, pass int) { // pass: how 
 			}
 
 			result = sortedList
+
+		// unsupported type
+		default:
+			log.Printf("Unsupported type %q", l.Index(0).Type().Kind().String())
 		}
+	// only supported array/slice type
+	default:
+		log.Printf("Only supported an array/slice type. But entered %q type", reflect.TypeOf(list).Kind().String())
 	}
 
 	return
