@@ -22,6 +22,7 @@ import (
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 	templating "github.com/ichang0301/learn-golang/18_templating"
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
+	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
@@ -297,4 +298,16 @@ func main() {
 		log.Fatalf("failed to selection sort. error: %v", err)
 	}
 	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedStringList)
+
+	insersionSortedIntList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", insersionSortedIntList)
+
+	insertionSortedStringList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", insertionSortedStringList)
 }
