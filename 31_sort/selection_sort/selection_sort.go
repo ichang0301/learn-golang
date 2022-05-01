@@ -10,43 +10,46 @@ import (
 	sort "github.com/ichang0301/learn-golang/31_sort"
 )
 
-type SelectionSortAlgorithm struct {
+type selectionSortAlgorithm struct {
 	list interface{}
 }
 
 // NewSelectionSortAlgorithm creates a SelectionSortAlgorithm implemented SortAlgorithm
-func NewSelectionSortAlgorithm(list interface{}) SelectionSortAlgorithm {
-	return SelectionSortAlgorithm{list: list}
+func NewSelectionSortAlgorithm(list interface{}) (*selectionSortAlgorithm, error) {
+	s := selectionSortAlgorithm{list: list}
+	if err := s.sort(); err != nil {
+		return nil, err
+	}
+	return &s, nil
 }
 
-// GetSortedList get sorted list without any argument variable
-func (s SelectionSortAlgorithm) GetSortedList() (sortedList interface{}, err error) {
-	return s.Sort(s.list)
+func (s *selectionSortAlgorithm) GetList() interface{} {
+	return s.list
 }
 
-func (s SelectionSortAlgorithm) Sort(unSortedList interface{}) (sortedList interface{}, err error) {
-	sortedList = unSortedList
-	kind, err := sort.DetectType(unSortedList)
+func (s *selectionSortAlgorithm) sort() error { // TODO: change the start letter to small letter
+	kind, err := sort.DetectType(s.list)
 	if err != nil {
-		return
+		return err
 	}
 
 	switch kind {
 	// sort the list of integer type
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(unSortedList)
-		sortedList = SelectionSortNumbers(intList)
+		intList := sort.InterfaceToSliceOfInt(s.list)
+		s.list = SelectionSortNumbers(intList)
 
 	// sort the list of string type
 	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(unSortedList)
-		sortedList = SelectionSortStrings(stringList)
+		stringList := sort.InterfaceToSliceOfString(s.list)
+		s.list = SelectionSortStrings(stringList)
+
 	// unsupported type
 	default:
-		err = sort.ErrUnsupportedType
+		return sort.ErrUnsupportedType
 	}
 
-	return
+	return nil
 }
 
 // SelectionSortNumbers sorts a list of numbers that the type is int using selection sort algorithm
@@ -62,9 +65,7 @@ func SelectionSortNumbers(list []int) []int {
 		}
 
 		if index != i {
-			tmp := list[i]
-			list[i] = list[index]
-			list[index] = tmp
+			list[i], list[index] = list[index], list[i]
 		}
 	}
 
@@ -84,9 +85,7 @@ func SelectionSortStrings(list []string) []string {
 		}
 
 		if index != i {
-			tmp := list[i]
-			list[i] = list[index]
-			list[index] = tmp
+			list[i], list[index] = list[index], list[i]
 		}
 	}
 

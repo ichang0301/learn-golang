@@ -1,9 +1,16 @@
-package test_utils
+package utils
 
 import (
 	"reflect"
 	"testing"
 )
+
+type TestCase struct {
+	UnSortedList interface{}
+	SortedList   interface{}
+	Err          error
+	Pass         int
+}
 
 func AssertError(t testing.TB, i int, got, want error) {
 	t.Helper()

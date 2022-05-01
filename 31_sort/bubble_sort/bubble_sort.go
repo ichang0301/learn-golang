@@ -11,11 +11,50 @@ import (
 	sort "github.com/ichang0301/learn-golang/31_sort"
 )
 
-type BubbleSortAlgorithm struct{}
+type BubbleSortAlgorithm struct {
+	list interface{}
+	pass int
+}
 
-func (b BubbleSortAlgorithm) Sort(unSortedList interface{}) (sortedList interface{}, err error) {
-	sortedList, _, err = BubbleSort(unSortedList)
-	return
+func NewBubbleSortAlgorithm(list interface{}) (*BubbleSortAlgorithm, error) {
+	b := BubbleSortAlgorithm{list: list}
+	if err := b.sort(); err != nil {
+		return nil, err
+	}
+	return &b, nil
+}
+
+func (b *BubbleSortAlgorithm) GetList() interface{} {
+	return b.list
+}
+
+func (b *BubbleSortAlgorithm) GetPass() int {
+	return b.pass
+}
+
+func (b *BubbleSortAlgorithm) sort() error {
+	kind, err := sort.DetectType(b.list)
+	if err != nil {
+		return err
+	}
+
+	switch kind {
+	// sort the list of integer type
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		intList := sort.InterfaceToSliceOfInt(b.list)
+		b.list, b.pass = BubbleSortNumbers(intList)
+
+	// sort the list of string type
+	case reflect.String:
+		stringList := sort.InterfaceToSliceOfString(b.list)
+		b.list, b.pass = BubbleSortStrings(stringList)
+
+	// unsupported type
+	default:
+		return sort.ErrUnsupportedType
+	}
+
+	return nil
 }
 
 // BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
@@ -53,9 +92,7 @@ func BubbleSortNumbers(list []int) ([]int, int) {
 			isSorted = true
 			for j := 0; j < len(list)-1; j++ {
 				if list[j] > list[j+1] {
-					tmp := list[j+1]
-					list[j+1] = list[j]
-					list[j] = tmp
+					list[j+1], list[j] = list[j], list[j+1]
 					isSorted = false
 				}
 			}
@@ -77,9 +114,7 @@ func BubbleSortStrings(list []string) ([]string, int) {
 			isSorted = true
 			for j := 0; j < len(list)-1; j++ {
 				if strings.Compare(list[j], list[j+1]) > 0 {
-					tmp := list[j+1]
-					list[j+1] = list[j]
-					list[j] = tmp
+					list[j+1], list[j] = list[j], list[j+1]
 					isSorted = false
 				}
 			}

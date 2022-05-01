@@ -22,7 +22,7 @@ import (
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 	templating "github.com/ichang0301/learn-golang/18_templating"
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
-
+	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
 	// http_server_io "github.com/ichang0301/learn-golang/21_io"
@@ -31,7 +31,6 @@ import (
 	// poker "github.com/ichang0301/learn-golang/24_websockets"
 	// revisiting "github.com/ichang0301/learn-golang/28_revisiting_http_handler"
 	// revisiting_db "github.com/ichang0301/learn-golang/28_revisiting_http_handler/db"
-	sort "github.com/ichang0301/learn-golang/31_sort"
 )
 
 func main() {
@@ -275,15 +274,27 @@ func main() {
 	unOrderedIntList := []int{3, 5, 1, 4, 2}
 	unOrderedStringList := []string{"good_morning", "hi", "good_night", "good_afternoon", "hello", "bye"}
 
-	bubbleSortAlgorithm := bubble_sort.BubbleSortAlgorithm{}
-	printOrderedList(bubbleSortAlgorithm, unOrderedIntList)
-	printOrderedList(bubbleSortAlgorithm, unOrderedStringList)
-}
-
-func printOrderedList(algorithm sort.SortAlgorithm, unSortedList interface{}) {
-	result, err := algorithm.Sort(unSortedList)
+	bubbleSortedIntList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedIntList)
 	if err != nil {
-		log.Printf("failed to sort. error: %v", err)
+		log.Fatalf("failed to bubble sort. error: %v", err)
 	}
-	log.Printf("result: %+v", result)
+	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedIntList)
+
+	bubbleSortedStringList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to bubble sort. error: %v", err)
+	}
+	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedStringList)
+
+	selectionSortedIntList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to selection sort. error: %v", err)
+	}
+	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedIntList)
+
+	selectionSortedStringList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to selection sort. error: %v", err)
+	}
+	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedStringList)
 }

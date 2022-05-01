@@ -17,7 +17,7 @@ func (e SortErrorFormat) Error() string { // implement 'error' interface. : http
 
 // SortAlgorithm is an interface to sort a list
 type SortAlgorithm interface {
-	Sort(unSortedList interface{}) (sortedList interface{}, err error)
+	sort() error
 }
 
 func DetectType(input interface{}) (reflect.Kind, error) {

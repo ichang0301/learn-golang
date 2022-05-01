@@ -6,35 +6,40 @@ import (
 	sort "github.com/ichang0301/learn-golang/31_sort"
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
-	test_utils "github.com/ichang0301/learn-golang/31_sort/utils/test"
+	"github.com/ichang0301/learn-golang/31_sort/utils"
 )
 
-func testBubbleSort(t testing.TB, i int, c test_utils.TestCase) {
+func testBubbleSort(t testing.TB, i int, c utils.TestCase) {
 	t.Helper()
 
-	b := bubble_sort.BubbleSortAlgorithm{}
-	got, err := b.Sort(c.UnSortedList)
-	test_utils.AssertError(t, i, err, c.Err)
-	test_utils.AssertList(t, i, got, c.SortedList)
+	got, err := bubble_sort.NewBubbleSortAlgorithm(c.UnSortedList)
+
+	utils.AssertError(t, i, err, c.Err)
+	if err == nil {
+		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertPass(t, i, got.GetPass(), c.Pass)
+	}
 }
 
-func testSelectionSort(t testing.TB, i int, c test_utils.TestCase) {
+func testSelectionSort(t testing.TB, i int, c utils.TestCase) {
 	t.Helper()
 
-	s := selection_sort.NewSelectionSortAlgorithm(c.UnSortedList)
-	got, err := s.Sort()
-	test_utils.AssertError(t, i, err, c.Err)
-	test_utils.AssertList(t, i, got, c.SortedList)
+	got, err := selection_sort.NewSelectionSortAlgorithm(c.UnSortedList)
+
+	utils.AssertError(t, i, err, c.Err)
+	if err == nil {
+		utils.AssertList(t, i, got.GetList(), c.SortedList)
+	}
 }
 
 func TestSort(t *testing.T) {
 	t.Run("test to sort numbers", func(t *testing.T) {
-		testCases := []test_utils.TestCase{
-			{UnSortedList: []int{}, SortedList: []int{}, Err: sort.ErrEmptyList},
-			{UnSortedList: []int{1, 2}, SortedList: []int{1, 2}},
-			{UnSortedList: []int{1, 3, 2}, SortedList: []int{1, 2, 3}},
-			{UnSortedList: []int{3, 2, 1}, SortedList: []int{1, 2, 3}},
-			{UnSortedList: []int{10, 1, 3, 2, 5, 9, 4, 7, 8, 6}, SortedList: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
+		testCases := []utils.TestCase{
+			{UnSortedList: []int{}, SortedList: []int{}, Err: sort.ErrEmptyList, Pass: 0},
+			{UnSortedList: []int{1, 2}, SortedList: []int{1, 2}, Pass: 1},
+			{UnSortedList: []int{1, 3, 2}, SortedList: []int{1, 2, 3}, Pass: 2},
+			{UnSortedList: []int{3, 2, 1}, SortedList: []int{1, 2, 3}, Pass: 3},
+			{UnSortedList: []int{10, 1, 3, 2, 5, 9, 4, 7, 8, 6}, SortedList: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, Pass: 5},
 		}
 
 		for i, c := range testCases {
@@ -44,10 +49,12 @@ func TestSort(t *testing.T) {
 	})
 
 	t.Run("test to sort alphabets", func(t *testing.T) {
-		testCases := []test_utils.TestCase{
-			{UnSortedList: []string{}, SortedList: []string{}, Err: sort.ErrEmptyList},
-			{UnSortedList: []string{"apple", "dog"}, SortedList: []string{"apple", "dog"}},
-			{UnSortedList: []string{"apple", "dog", "banana"}, SortedList: []string{"apple", "banana", "dog"}},
+		testCases := []utils.TestCase{
+			{UnSortedList: []string{}, SortedList: []string{}, Err: sort.ErrEmptyList, Pass: 0},
+			{UnSortedList: []string{"apple", "dog"}, SortedList: []string{"apple", "dog"}, Pass: 1},
+			{UnSortedList: []string{"apple", "a", "apple", "dog"}, SortedList: []string{"a", "apple", "apple", "dog"}, Pass: 2},
+			{UnSortedList: []string{"apple", "dog", "banana"}, SortedList: []string{"apple", "banana", "dog"}, Pass: 2},
+			{UnSortedList: []string{"apple", "zzzz", "dog", "zzz", "banana", "zoo"}, SortedList: []string{"apple", "banana", "dog", "zoo", "zzz", "zzzz"}, Pass: 4},
 		}
 
 		for i, c := range testCases {
@@ -57,7 +64,7 @@ func TestSort(t *testing.T) {
 	})
 
 	t.Run("test to list of unsupported type", func(t *testing.T) {
-		testCases := []test_utils.TestCase{
+		testCases := []utils.TestCase{
 			{UnSortedList: true, SortedList: true, Err: sort.ErrUnsupportedType},
 			{UnSortedList: []bool{true, false}, SortedList: []bool{true, false}, Err: sort.ErrUnsupportedType},
 			{UnSortedList: []byte("hello"), SortedList: []byte("hello"), Err: sort.ErrUnsupportedType},
