@@ -5,6 +5,7 @@ import (
 
 	sort "github.com/ichang0301/learn-golang/31_sort"
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
+	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 	test_utils "github.com/ichang0301/learn-golang/31_sort/utils/test"
 )
 
@@ -13,6 +14,15 @@ func testBubbleSort(t testing.TB, i int, c test_utils.TestCase) {
 
 	b := bubble_sort.BubbleSortAlgorithm{}
 	got, err := b.Sort(c.UnSortedList)
+	test_utils.AssertError(t, i, err, c.Err)
+	test_utils.AssertList(t, i, got, c.SortedList)
+}
+
+func testSelectionSort(t testing.TB, i int, c test_utils.TestCase) {
+	t.Helper()
+
+	s := selection_sort.NewSelectionSortAlgorithm(c.UnSortedList)
+	got, err := s.Sort()
 	test_utils.AssertError(t, i, err, c.Err)
 	test_utils.AssertList(t, i, got, c.SortedList)
 }
@@ -29,6 +39,7 @@ func TestSort(t *testing.T) {
 
 		for i, c := range testCases {
 			testBubbleSort(t, i, c)
+			testSelectionSort(t, i, c)
 		}
 	})
 
@@ -41,6 +52,7 @@ func TestSort(t *testing.T) {
 
 		for i, c := range testCases {
 			testBubbleSort(t, i, c)
+			testSelectionSort(t, i, c)
 		}
 	})
 
@@ -53,6 +65,7 @@ func TestSort(t *testing.T) {
 
 		for i, c := range testCases {
 			testBubbleSort(t, i, c)
+			testSelectionSort(t, i, c)
 		}
 	})
 }
