@@ -44,7 +44,7 @@ func BubbleSort(list interface{}) (result interface{}, pass int, err error) { //
 	return
 }
 
-// BubbleSortNumbers sorts a list of numbers that the type is int
+// BubbleSortNumbers sorts a list of numbers that the type is int using bubble sort algorithm
 func BubbleSortNumbers(list []int) ([]int, int) {
 	var isSorted bool
 	var pass int
@@ -68,7 +68,7 @@ func BubbleSortNumbers(list []int) ([]int, int) {
 	return list, pass
 }
 
-// BubbleSortStrings sorts a list of strings
+// BubbleSortStrings sorts a list of strings using bubble sort algorithm
 func BubbleSortStrings(list []string) ([]string, int) {
 	var isSorted bool
 	var pass int

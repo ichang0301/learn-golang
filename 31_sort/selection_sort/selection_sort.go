@@ -14,10 +14,12 @@ type SelectionSortAlgorithm struct {
 	list interface{}
 }
 
+// NewSelectionSortAlgorithm creates a SelectionSortAlgorithm implemented SortAlgorithm
 func NewSelectionSortAlgorithm(list interface{}) SelectionSortAlgorithm {
 	return SelectionSortAlgorithm{list: list}
 }
 
+// GetSortedList get sorted list without any argument variable
 func (s SelectionSortAlgorithm) GetSortedList() (sortedList interface{}, err error) {
 	return s.Sort(s.list)
 }
@@ -47,6 +49,7 @@ func (s SelectionSortAlgorithm) Sort(unSortedList interface{}) (sortedList inter
 	return
 }
 
+// SelectionSortNumbers sorts a list of numbers that the type is int using selection sort algorithm
 func SelectionSortNumbers(list []int) []int {
 	for i := 0; i < len(list); i++ {
 		smallest := math.MaxInt
@@ -68,6 +71,7 @@ func SelectionSortNumbers(list []int) []int {
 	return list
 }
 
+// SelectionSortNumbers sorts a list of strings using selection sort algorithm
 func SelectionSortStrings(list []string) []string {
 	for i := len(list) - 1; i >= 0; i-- {
 		biggestStr := "a"
