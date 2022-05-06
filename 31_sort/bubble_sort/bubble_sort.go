@@ -57,32 +57,6 @@ func (b *BubbleSortAlgorithm) sort() error {
 	return nil
 }
 
-// BubbleSort sorts items using the bubble sort algorithm and then returns the sorted list and how many times the algorithm goes through the list.
-func BubbleSort(list interface{}) (result interface{}, pass int, err error) { // pass: how many times we take of sorting the list using bubble sort algorithm
-	result = list
-	kind, err := sort.DetectType(list)
-	if err != nil {
-		return
-	}
-
-	switch kind {
-	// sort the list of integer type
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(list)
-		result, pass = BubbleSortNumbers(intList)
-
-	// sort the list of string type
-	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(list)
-		result, pass = BubbleSortStrings(stringList)
-
-	// unsupported type
-	default:
-		err = sort.ErrUnsupportedType
-	}
-	return
-}
-
 // BubbleSortNumbers sorts a list of numbers that the type is int using bubble sort algorithm
 func BubbleSortNumbers(list []int) ([]int, int) {
 	var isSorted bool
