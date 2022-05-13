@@ -21,9 +21,7 @@ import (
 	clockface_svg "github.com/ichang0301/learn-golang/16_math/svg"
 	blogposts "github.com/ichang0301/learn-golang/17_reading_files"
 	templating "github.com/ichang0301/learn-golang/18_templating"
-	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
-	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
-	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
+
 	// http_server "github.com/ichang0301/learn-golang/19_http_server"
 	// http_server_json "github.com/ichang0301/learn-golang/20_json"
 	// http_server_io "github.com/ichang0301/learn-golang/21_io"
@@ -32,6 +30,11 @@ import (
 	// poker "github.com/ichang0301/learn-golang/24_websockets"
 	// revisiting "github.com/ichang0301/learn-golang/28_revisiting_http_handler"
 	// revisiting_db "github.com/ichang0301/learn-golang/28_revisiting_http_handler/db"
+
+	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
+	"github.com/ichang0301/learn-golang/31_sort/heap_sort"
+	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
+	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 )
 
 func main() {
@@ -310,4 +313,16 @@ func main() {
 		log.Fatalf("failed to insersion sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", insertionSortedStringList)
+
+	heapSortedIntList, err := heap_sort.NewHeapSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedIntList)
+
+	heapSortedStringList, err := heap_sort.NewHeapSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedStringList)
 }
