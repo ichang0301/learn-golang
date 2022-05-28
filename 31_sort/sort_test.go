@@ -73,10 +73,10 @@ func TestSort(t *testing.T) {
 		testCases := []utils.TestCase{
 			{UnSortedList: []int{}, SortedList: []int{}, Err: sort.ErrEmptyList, Pass: 0},
 			{UnSortedList: []int{1, 2}, SortedList: []int{1, 2}, Pass: 1},
-			{UnSortedList: []int{1, 3, 2}, SortedList: []int{1, 2, 3}, Pass: 2},
-			{UnSortedList: []int{3, 2, 1}, SortedList: []int{1, 2, 3}, Pass: 3},
-			{UnSortedList: []int{5, 8, 1, 9, 3, 2, 6, 4, 7}, SortedList: []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, Pass: 5},
-			{UnSortedList: []int{10, 1, 3, 2, 5, 9, 4, 7, 8, 6}, SortedList: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, Pass: 5},
+			{UnSortedList: []int{1, -1, 3, 2}, SortedList: []int{-1, 1, 2, 3}, Pass: 2},
+			{UnSortedList: []int{3, 2, -1, 0, 1}, SortedList: []int{-1, 0, 1, 2, 3}, Pass: 3},
+			{UnSortedList: []int{5, 8, 0, 1, 9, 3, -1, 2, 6, 4, 7}, SortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, Pass: 7},
+			{UnSortedList: []int{10, 1, 0, 3, 2, 5, 9, 4, 7, 8, 6, -1}, SortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, Pass: 12},
 		}
 
 		for i, c := range testCases {
@@ -123,3 +123,5 @@ func TestSort(t *testing.T) {
 		}
 	})
 }
+
+// TODO: benchmark each of the sort algorithms
