@@ -11,28 +11,28 @@ import (
 	sort "github.com/ichang0301/learn-golang/31_sort"
 )
 
-type BubbleSortAlgorithm struct {
+type bubbleSortAlgorithm struct {
 	list interface{}
 	pass int
 }
 
-func NewBubbleSortAlgorithm(list interface{}) (*BubbleSortAlgorithm, error) {
-	b := BubbleSortAlgorithm{list: list}
+func NewBubbleSortAlgorithm(list interface{}) (*bubbleSortAlgorithm, error) {
+	b := bubbleSortAlgorithm{list: list}
 	if err := b.sort(); err != nil {
 		return nil, err
 	}
 	return &b, nil
 }
 
-func (b *BubbleSortAlgorithm) GetList() interface{} {
+func (b *bubbleSortAlgorithm) GetList() interface{} {
 	return b.list
 }
 
-func (b *BubbleSortAlgorithm) GetPass() int {
+func (b *bubbleSortAlgorithm) GetPass() int {
 	return b.pass
 }
 
-func (b *BubbleSortAlgorithm) sort() error {
+func (b *bubbleSortAlgorithm) sort() error {
 	kind, err := sort.DetectType(b.list)
 	if err != nil {
 		return err
