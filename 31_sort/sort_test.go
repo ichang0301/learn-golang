@@ -7,6 +7,7 @@ import (
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
 	"github.com/ichang0301/learn-golang/31_sort/heap_sort"
 	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
+	"github.com/ichang0301/learn-golang/31_sort/merge_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 	"github.com/ichang0301/learn-golang/31_sort/utils"
 )
@@ -56,6 +57,17 @@ func testHeapSort(t testing.TB, i int, c utils.TestCase) {
 	}
 }
 
+func testMergeSort(t testing.TB, i int, c utils.TestCase) {
+	t.Helper()
+
+	got, err := merge_sort.NewMergeSortAlgorithm(c.UnSortedList)
+
+	utils.AssertError(t, i, err, c.Err)
+	if err == nil {
+		utils.AssertList(t, i, got.GetList(), c.SortedList)
+	}
+}
+
 func TestSort(t *testing.T) {
 	t.Run("test to sort numbers", func(t *testing.T) {
 		testCases := []utils.TestCase{
@@ -72,6 +84,7 @@ func TestSort(t *testing.T) {
 			testSelectionSort(t, i, c)
 			testInsertionSort(t, i, c)
 			testHeapSort(t, i, c)
+			testMergeSort(t, i, c)
 		}
 	})
 
@@ -90,6 +103,7 @@ func TestSort(t *testing.T) {
 			testSelectionSort(t, i, c)
 			testInsertionSort(t, i, c)
 			testHeapSort(t, i, c)
+			testMergeSort(t, i, c)
 		}
 	})
 
@@ -105,6 +119,7 @@ func TestSort(t *testing.T) {
 			testSelectionSort(t, i, c)
 			testInsertionSort(t, i, c)
 			testHeapSort(t, i, c)
+			testMergeSort(t, i, c)
 		}
 	})
 }
