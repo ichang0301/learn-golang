@@ -34,6 +34,8 @@ import (
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
 	"github.com/ichang0301/learn-golang/31_sort/heap_sort"
 	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
+	"github.com/ichang0301/learn-golang/31_sort/merge_sort"
+	"github.com/ichang0301/learn-golang/31_sort/quick_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 )
 
@@ -325,4 +327,28 @@ func main() {
 		log.Fatalf("failed to insersion sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedStringList)
+
+	mergeSortedIntList, err := merge_sort.NewMergeSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to merge sort. error: %v", err)
+	}
+	log.Printf("the ordered list using merge sort algorithm: %v", mergeSortedIntList)
+
+	mergeSortedStringList, err := merge_sort.NewMergeSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to merge sort. error: %v", err)
+	}
+	log.Printf("the ordered list using merge sort algorithm: %v", mergeSortedStringList)
+
+	quickSortedIntList, err := quick_sort.NewQuickSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to quick sort. error: %v", err)
+	}
+	log.Printf("the ordered list using quick sort algorithm: %v", quickSortedIntList)
+
+	quickSortedStringList, err := quick_sort.NewQuickSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to quick sort. error: %v", err)
+	}
+	log.Printf("the ordered list using quick sort algorithm: %v", quickSortedStringList)
 }
