@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"sync"
 	"time"
@@ -29,8 +28,13 @@ import (
 	// poker "github.com/ichang0301/learn-golang/22_command_line"
 	// poker "github.com/ichang0301/learn-golang/23_time"
 	// poker "github.com/ichang0301/learn-golang/24_websockets"
-	revisiting "github.com/ichang0301/learn-golang/28_revisiting_http_handler"
-	revisiting_db "github.com/ichang0301/learn-golang/28_revisiting_http_handler/db"
+	// revisiting "github.com/ichang0301/learn-golang/28_revisiting_http_handler"
+	// revisiting_db "github.com/ichang0301/learn-golang/28_revisiting_http_handler/db"
+
+	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
+	"github.com/ichang0301/learn-golang/31_sort/heap_sort"
+	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
+	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
 )
 
 func main() {
@@ -266,7 +270,59 @@ func main() {
 	// // ================== end of web-server application code ==================
 
 	// 28_revisiting_http_handler
-	mongoService := revisiting_db.NewMongoUserService()
-	server := revisiting.NewUserServer(mongoService)
-	http.ListenAndServe(":8000", http.HandlerFunc(server.RegisterUser))
+	// mongoService := revisiting_db.NewMongoUserService()
+	// server := revisiting.NewUserServer(mongoService)
+	// http.ListenAndServe(":8000", http.HandlerFunc(server.RegisterUser))
+
+	// 31_sort
+	unOrderedIntList := []int{3, 5, 1, 4, 2}
+	unOrderedStringList := []string{"good_morning", "hi", "good_night", "good_afternoon", "hello", "bye"}
+
+	bubbleSortedIntList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to bubble sort. error: %v", err)
+	}
+	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedIntList)
+
+	bubbleSortedStringList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to bubble sort. error: %v", err)
+	}
+	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedStringList)
+
+	selectionSortedIntList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to selection sort. error: %v", err)
+	}
+	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedIntList)
+
+	selectionSortedStringList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to selection sort. error: %v", err)
+	}
+	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedStringList)
+
+	insersionSortedIntList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", insersionSortedIntList)
+
+	insertionSortedStringList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", insertionSortedStringList)
+
+	heapSortedIntList, err := heap_sort.NewHeapSortAlgorithm(unOrderedIntList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedIntList)
+
+	heapSortedStringList, err := heap_sort.NewHeapSortAlgorithm(unOrderedStringList)
+	if err != nil {
+		log.Fatalf("failed to insersion sort. error: %v", err)
+	}
+	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedStringList)
 }
