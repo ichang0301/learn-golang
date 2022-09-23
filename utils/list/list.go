@@ -6,9 +6,9 @@ import (
 	"github.com/ichang0301/learn-golang/utils/errors"
 )
 
-// DetectDataType gets a data type from the interface type.
+// DetectWhatListDataTypeIs gets a data type from the interface type.
 // But it supports only a slice or array.
-func DetectDataType(input interface{}) (reflect.Kind, error) {
+func DetectWhatListDataTypeIs(input interface{}) (reflect.Kind, error) {
 	v := reflect.ValueOf(input)
 
 	switch reflect.TypeOf(input).Kind() {
@@ -27,7 +27,7 @@ func DetectDataType(input interface{}) (reflect.Kind, error) {
 
 // GetIntSliceFromInterface gets a slice of int from the interface
 func GetIntSliceFromInterface(input interface{}) ([]int, error) {
-	typeName, err := DetectDataType(input)
+	typeName, err := DetectWhatListDataTypeIs(input)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func getIntSliceFromInterface(input interface{}) []int {
 
 // GetFloatSliceFromInterface gets a slice of float from the interface
 func GetFloatSliceFromInterface(input interface{}) ([]float64, error) {
-	typeName, err := DetectDataType(input)
+	typeName, err := DetectWhatListDataTypeIs(input)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func getFloatSliceFromInterface(input interface{}) []float64 {
 
 // GetStringSliceFromInterface gets a slice of string from the interface
 func GetStringSliceFromInterface(input interface{}) ([]string, error) {
-	typeName, err := DetectDataType(input)
+	typeName, err := DetectWhatListDataTypeIs(input)
 	if err != nil {
 		return nil, err
 	}

@@ -150,7 +150,7 @@ func TestUnsupportedDataType(t *testing.T) {
 
 	for _, tt := range testcases {
 		t.Run(tt.description, func(t *testing.T) {
-			kind, _ := list.DetectDataType(tt.list)
+			kind, _ := list.DetectWhatListDataTypeIs(tt.list)
 			fmt.Printf("kind: %v\n", kind)
 
 			// given

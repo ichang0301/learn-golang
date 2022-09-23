@@ -34,7 +34,7 @@ func (b *bubbleSortAlgorithm) GetPass() int {
 }
 
 func (b *bubbleSortAlgorithm) sort() error {
-	kind, err := list.DetectDataType(b.list)
+	kind, err := list.DetectWhatListDataTypeIs(b.list)
 	if err != nil {
 		return err
 	}

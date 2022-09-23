@@ -16,7 +16,7 @@ func NewLinearSearch(list interface{}) *linearSearch {
 }
 
 func (l *linearSearch) Search(input interface{}) (int, error) {
-	kind, err := list.DetectDataType(l.list)
+	kind, err := list.DetectWhatListDataTypeIs(l.list)
 	if err != nil {
 		return 0, err
 	}

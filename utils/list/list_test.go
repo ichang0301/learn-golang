@@ -53,7 +53,7 @@ func TestDetectDataType(t *testing.T) {
 	for _, tt := range testcases {
 		t.Run(tt.description, func(t *testing.T) {
 			// when
-			actual, err := list.DetectDataType(tt.list)
+			actual, err := list.DetectWhatListDataTypeIs(tt.list)
 
 			// then
 			utils.AssertError(t, tt.expectedErr, err)

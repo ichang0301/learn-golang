@@ -29,7 +29,7 @@ func (s *selectionSortAlgorithm) GetList() interface{} {
 }
 
 func (s *selectionSortAlgorithm) sort() error {
-	kind, err := list.DetectDataType(s.list)
+	kind, err := list.DetectWhatListDataTypeIs(s.list)
 	if err != nil {
 		return err
 	}

@@ -26,7 +26,7 @@ func (m *mergeSortAlgorithm) GetList() interface{} {
 }
 
 func (m *mergeSortAlgorithm) sort() error {
-	kind, err := list.DetectDataType(m.list)
+	kind, err := list.DetectWhatListDataTypeIs(m.list)
 	if err != nil {
 		return err
 	}

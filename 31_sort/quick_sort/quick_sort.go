@@ -27,7 +27,7 @@ func (i *quickSortAlgorithm) GetList() interface{} {
 }
 
 func (i *quickSortAlgorithm) sort() error {
-	kind, err := list.DetectDataType(i.list)
+	kind, err := list.DetectWhatListDataTypeIs(i.list)
 	if err != nil {
 		return err
 	}
