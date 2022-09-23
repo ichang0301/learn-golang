@@ -17,7 +17,7 @@ func AssertError(t testing.TB, expected, actual error) {
 	}
 }
 
-func AssertList(t testing.TB, expected, actual interface{}) {
+func AssertElement(t testing.TB, expected, actual interface{}) {
 	t.Helper()
 
 	if !reflect.DeepEqual(actual, expected) {

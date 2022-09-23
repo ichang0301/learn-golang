@@ -99,7 +99,7 @@ func TestGetIntSliceFromInterface(t *testing.T) {
 			// then
 			utils.AssertError(t, tt.expectedErr, err)
 			if err == nil {
-				utils.AssertList(t, tt.expectedList, actual)
+				utils.AssertElement(t, tt.expectedList, actual)
 			}
 		})
 	}
@@ -140,7 +140,7 @@ func TestGetStringSliceFromInterface(t *testing.T) {
 			// then
 			utils.AssertError(t, tt.expectedErr, err)
 			if err == nil {
-				utils.AssertList(t, tt.expectedList, actual)
+				utils.AssertElement(t, tt.expectedList, actual)
 			}
 		})
 	}

@@ -2,6 +2,7 @@ package errors
 
 const (
 	ErrUnsupportedType = ErrorFormat("unsupported type")
+	ErrNoSuchElement   = ErrorFormat("no such element")
 	ErrEmptyList       = ErrorFormat("empty slice/array")
 )
 

@@ -28,7 +28,7 @@ func testSelectionSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 	}
 }
 
@@ -39,7 +39,7 @@ func testInsertionSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 	}
 }
 
@@ -50,7 +50,7 @@ func testHeapSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 	}
 }
 
@@ -61,7 +61,7 @@ func testMergeSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 	}
 }
 
@@ -72,7 +72,7 @@ func testQuickSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 	}
 }
 
@@ -83,7 +83,7 @@ func testBubbleSort(t testing.TB, c testCase) {
 
 	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, got.GetList(), c.sortedList)
+		utils.AssertElement(t, got.GetList(), c.sortedList)
 		assertBubbleSortTimes(t, got.GetPass(), c.bubbleSortTimes)
 	}
 }

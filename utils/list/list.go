@@ -21,7 +21,7 @@ func DetectDataType(input interface{}) (reflect.Kind, error) {
 
 	// only supported array/slice type
 	default:
-		return 0, errors.ErrUnsupportedType
+		return v.Kind(), errors.ErrUnsupportedType
 	}
 }
 
@@ -33,7 +33,7 @@ func GetIntSliceFromInterface(input interface{}) ([]int, error) {
 	}
 
 	switch typeName {
-	// return a number list
+	// return a int list
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return getIntSliceFromInterface(input), nil
 	}
@@ -47,6 +47,32 @@ func getIntSliceFromInterface(input interface{}) []int {
 	v := reflect.ValueOf(input)
 	for i := 0; i < v.Len(); i++ {
 		result = append(result, int(v.Index(i).Int()))
+	}
+	return result
+}
+
+// GetFloatSliceFromInterface gets a slice of float from the interface
+func GetFloatSliceFromInterface(input interface{}) ([]float64, error) {
+	typeName, err := DetectDataType(input)
+	if err != nil {
+		return nil, err
+	}
+
+	switch typeName {
+	// return a float list
+	case reflect.Float32, reflect.Float64:
+		return getFloatSliceFromInterface(input), nil
+	}
+
+	// unsupported type
+	return nil, errors.ErrUnsupportedType
+}
+
+func getFloatSliceFromInterface(input interface{}) []float64 {
+	var result []float64
+	v := reflect.ValueOf(input)
+	for i := 0; i < v.Len(); i++ {
+		result = append(result, v.Index(i).Float())
 	}
 	return result
 }

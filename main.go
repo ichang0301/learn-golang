@@ -37,6 +37,8 @@ import (
 	"github.com/ichang0301/learn-golang/31_sort/merge_sort"
 	"github.com/ichang0301/learn-golang/31_sort/quick_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
+
+	"github.com/ichang0301/learn-golang/32_search/linear_search"
 )
 
 func main() {
@@ -277,78 +279,93 @@ func main() {
 	// http.ListenAndServe(":8000", http.HandlerFunc(server.RegisterUser))
 
 	// 31_sort
-	unOrderedIntList := []int{3, 5, 1, 4, 2}
-	unOrderedStringList := []string{"good_morning", "hi", "good_night", "good_afternoon", "hello", "bye"}
+	intList := []int{3, 5, 1, 4, 2}
+	stringList := []string{"good_morning", "hi", "good_night", "good_afternoon", "hello", "bye"}
 
-	bubbleSortedIntList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedIntList)
+	bubbleSortedIntList, err := bubble_sort.NewBubbleSortAlgorithm(intList)
 	if err != nil {
 		log.Fatalf("failed to bubble sort. error: %v", err)
 	}
 	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedIntList)
 
-	bubbleSortedStringList, err := bubble_sort.NewBubbleSortAlgorithm(unOrderedStringList)
+	bubbleSortedStringList, err := bubble_sort.NewBubbleSortAlgorithm(stringList)
 	if err != nil {
 		log.Fatalf("failed to bubble sort. error: %v", err)
 	}
 	log.Printf("the ordered list using bubble sort algorithm: %+v", bubbleSortedStringList)
 
-	selectionSortedIntList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedIntList)
+	selectionSortedIntList, err := selection_sort.NewSelectionSortAlgorithm(intList)
 	if err != nil {
 		log.Fatalf("failed to selection sort. error: %v", err)
 	}
 	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedIntList)
 
-	selectionSortedStringList, err := selection_sort.NewSelectionSortAlgorithm(unOrderedStringList)
+	selectionSortedStringList, err := selection_sort.NewSelectionSortAlgorithm(stringList)
 	if err != nil {
 		log.Fatalf("failed to selection sort. error: %v", err)
 	}
 	log.Printf("the ordered list using selection sort algorithm: %v", selectionSortedStringList)
 
-	insersionSortedIntList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedIntList)
+	insersionSortedIntList, err := insertion_sort.NewInsertionSortAlgorithm(intList)
 	if err != nil {
 		log.Fatalf("failed to insersion sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", insersionSortedIntList)
 
-	insertionSortedStringList, err := insertion_sort.NewInsertionSortAlgorithm(unOrderedStringList)
+	insertionSortedStringList, err := insertion_sort.NewInsertionSortAlgorithm(stringList)
 	if err != nil {
 		log.Fatalf("failed to insersion sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", insertionSortedStringList)
 
-	heapSortedIntList, err := heap_sort.NewHeapSortAlgorithm(unOrderedIntList)
+	heapSortedIntList, err := heap_sort.NewHeapSortAlgorithm(intList)
 	if err != nil {
-		log.Fatalf("failed to insersion sort. error: %v", err)
+		log.Fatalf("failed to heap sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedIntList)
 
-	heapSortedStringList, err := heap_sort.NewHeapSortAlgorithm(unOrderedStringList)
+	heapSortedStringList, err := heap_sort.NewHeapSortAlgorithm(stringList)
 	if err != nil {
-		log.Fatalf("failed to insersion sort. error: %v", err)
+		log.Fatalf("failed to heap sort. error: %v", err)
 	}
 	log.Printf("the ordered list using insersion sort algorithm: %v", heapSortedStringList)
 
-	mergeSortedIntList, err := merge_sort.NewMergeSortAlgorithm(unOrderedIntList)
+	mergeSortedIntList, err := merge_sort.NewMergeSortAlgorithm(intList)
 	if err != nil {
 		log.Fatalf("failed to merge sort. error: %v", err)
 	}
 	log.Printf("the ordered list using merge sort algorithm: %v", mergeSortedIntList)
 
-	mergeSortedStringList, err := merge_sort.NewMergeSortAlgorithm(unOrderedStringList)
+	mergeSortedStringList, err := merge_sort.NewMergeSortAlgorithm(stringList)
 	if err != nil {
 		log.Fatalf("failed to merge sort. error: %v", err)
 	}
 	log.Printf("the ordered list using merge sort algorithm: %v", mergeSortedStringList)
 
-	quickSortedIntList, err := quick_sort.NewQuickSortAlgorithm(unOrderedIntList)
+	quickSortedIntList, err := quick_sort.NewQuickSortAlgorithm(intList)
 	if err != nil {
 		log.Fatalf("failed to quick sort. error: %v", err)
 	}
 	log.Printf("the ordered list using quick sort algorithm: %v", quickSortedIntList)
 
-	quickSortedStringList, err := quick_sort.NewQuickSortAlgorithm(unOrderedStringList)
+	quickSortedStringList, err := quick_sort.NewQuickSortAlgorithm(stringList)
 	if err != nil {
 		log.Fatalf("failed to quick sort. error: %v", err)
 	}
 	log.Printf("the ordered list using quick sort algorithm: %v", quickSortedStringList)
+
+	// 32_search
+	linearSearchIntList := linear_search.NewLinearSearch(intList)
+	linearSearch1, err := linearSearchIntList.Search(1)
+	if err != nil {
+		log.Fatalf("failed to linear seach. error: %v", err)
+	}
+	log.Printf("linearSearch1: %d", linearSearch1)
+
+	linearSearchStringList := linear_search.NewLinearSearch(stringList)
+	linearSearchHi, err := linearSearchStringList.Search("hi")
+	if err != nil {
+		log.Fatalf("failed to linear seach. error: %v", err)
+	}
+	log.Printf("linearSearchHi: %d", linearSearchHi)
 }
