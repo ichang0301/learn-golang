@@ -6,7 +6,8 @@ import (
 	"reflect"
 	"strings"
 
-	sort "github.com/ichang0301/learn-golang/31_sort"
+	"github.com/ichang0301/learn-golang/utils/errors"
+	"github.com/ichang0301/learn-golang/utils/list"
 )
 
 type quickSortAlgorithm struct {
@@ -26,7 +27,7 @@ func (i *quickSortAlgorithm) GetList() interface{} {
 }
 
 func (i *quickSortAlgorithm) sort() error {
-	kind, err := sort.DetectType(i.list)
+	kind, err := list.DetectDataType(i.list)
 	if err != nil {
 		return err
 	}
@@ -34,17 +35,23 @@ func (i *quickSortAlgorithm) sort() error {
 	switch kind {
 	// sort the list of integer type
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(i.list)
+		intList, err := list.GetIntSliceFromInterface(i.list)
+		if err != nil {
+			return err
+		}
 		i.list = QuickSortNumbers(intList, 0, len(intList)-1)
 
 	// sort the list of string type
 	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(i.list)
+		stringList, err := list.GetStringSliceFromInterface(i.list)
+		if err != nil {
+			return err
+		}
 		i.list = QuickSortStrings(stringList, 0, len(stringList)-1)
 
 	// unsupported type
 	default:
-		return sort.ErrUnsupportedType
+		return errors.ErrUnsupportedType
 	}
 
 	return nil

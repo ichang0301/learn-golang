@@ -7,7 +7,8 @@ import (
 	"reflect"
 	"strings"
 
-	sort "github.com/ichang0301/learn-golang/31_sort"
+	"github.com/ichang0301/learn-golang/utils/errors"
+	"github.com/ichang0301/learn-golang/utils/list"
 )
 
 type selectionSortAlgorithm struct {
@@ -27,8 +28,8 @@ func (s *selectionSortAlgorithm) GetList() interface{} {
 	return s.list
 }
 
-func (s *selectionSortAlgorithm) sort() error { // TODO: change the start letter to small letter
-	kind, err := sort.DetectType(s.list)
+func (s *selectionSortAlgorithm) sort() error {
+	kind, err := list.DetectDataType(s.list)
 	if err != nil {
 		return err
 	}
@@ -36,17 +37,23 @@ func (s *selectionSortAlgorithm) sort() error { // TODO: change the start letter
 	switch kind {
 	// sort the list of integer type
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(s.list)
+		intList, err := list.GetIntSliceFromInterface(s.list)
+		if err != nil {
+			return err
+		}
 		s.list = SelectionSortNumbers(intList)
 
 	// sort the list of string type
 	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(s.list)
+		stringList, err := list.GetStringSliceFromInterface(s.list)
+		if err != nil {
+			return err
+		}
 		s.list = SelectionSortStrings(stringList)
 
 	// unsupported type
 	default:
-		return sort.ErrUnsupportedType
+		return errors.ErrUnsupportedType
 	}
 
 	return nil

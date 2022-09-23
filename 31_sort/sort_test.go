@@ -3,140 +3,196 @@ package sort_test
 import (
 	"testing"
 
-	sort "github.com/ichang0301/learn-golang/31_sort"
 	"github.com/ichang0301/learn-golang/31_sort/bubble_sort"
 	"github.com/ichang0301/learn-golang/31_sort/heap_sort"
 	"github.com/ichang0301/learn-golang/31_sort/insertion_sort"
 	"github.com/ichang0301/learn-golang/31_sort/merge_sort"
 	"github.com/ichang0301/learn-golang/31_sort/quick_sort"
 	"github.com/ichang0301/learn-golang/31_sort/selection_sort"
-	"github.com/ichang0301/learn-golang/31_sort/utils"
+	"github.com/ichang0301/learn-golang/utils"
+	"github.com/ichang0301/learn-golang/utils/errors"
 )
 
-func testBubbleSort(t testing.TB, i int, c utils.TestCase) {
+type testCase struct {
+	description     string
+	unSortedList    interface{}
+	sortedList      interface{}
+	err             error
+	bubbleSortTimes int
+}
+
+func testSelectionSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := bubble_sort.NewBubbleSortAlgorithm(c.UnSortedList)
+	got, err := selection_sort.NewSelectionSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
-		utils.AssertPass(t, i, got.GetPass(), c.Pass)
+		utils.AssertList(t, got.GetList(), c.sortedList)
 	}
 }
 
-func testSelectionSort(t testing.TB, i int, c utils.TestCase) {
+func testInsertionSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := selection_sort.NewSelectionSortAlgorithm(c.UnSortedList)
+	got, err := insertion_sort.NewInsertionSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertList(t, got.GetList(), c.sortedList)
 	}
 }
 
-func testInsertionSort(t testing.TB, i int, c utils.TestCase) {
+func testHeapSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := insertion_sort.NewInsertionSortAlgorithm(c.UnSortedList)
+	got, err := heap_sort.NewHeapSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertList(t, got.GetList(), c.sortedList)
 	}
 }
 
-func testHeapSort(t testing.TB, i int, c utils.TestCase) {
+func testMergeSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := heap_sort.NewHeapSortAlgorithm(c.UnSortedList)
+	got, err := merge_sort.NewMergeSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertList(t, got.GetList(), c.sortedList)
 	}
 }
 
-func testMergeSort(t testing.TB, i int, c utils.TestCase) {
+func testQuickSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := merge_sort.NewMergeSortAlgorithm(c.UnSortedList)
+	got, err := quick_sort.NewQuickSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertList(t, got.GetList(), c.sortedList)
 	}
 }
 
-func testQuickSort(t testing.TB, i int, c utils.TestCase) {
+func testBubbleSort(t testing.TB, c testCase) {
 	t.Helper()
 
-	got, err := quick_sort.NewQuickSortAlgorithm(c.UnSortedList)
+	got, err := bubble_sort.NewBubbleSortAlgorithm(c.unSortedList)
 
-	utils.AssertError(t, i, err, c.Err)
+	utils.AssertError(t, err, c.err)
 	if err == nil {
-		utils.AssertList(t, i, got.GetList(), c.SortedList)
+		utils.AssertList(t, got.GetList(), c.sortedList)
+		assertBubbleSortTimes(t, got.GetPass(), c.bubbleSortTimes)
 	}
 }
 
-func TestSort(t *testing.T) {
-	t.Run("test to sort numbers", func(t *testing.T) {
-		testCases := []utils.TestCase{
-			{UnSortedList: []int{}, SortedList: []int{}, Err: sort.ErrEmptyList, Pass: 0},
-			{UnSortedList: []int{1, 2}, SortedList: []int{1, 2}, Pass: 1},
-			{UnSortedList: []int{1, -1, 3, 2}, SortedList: []int{-1, 1, 2, 3}, Pass: 2},
-			{UnSortedList: []int{3, 2, -1, 0, 1}, SortedList: []int{-1, 0, 1, 2, 3}, Pass: 3},
-			{UnSortedList: []int{5, 8, 0, 1, 9, 3, -1, 2, 6, 4, 7}, SortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, Pass: 7},
-			{UnSortedList: []int{10, 1, 0, 3, 2, 5, 9, 4, 7, 8, 6, -1}, SortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, Pass: 12},
-		}
+func assertBubbleSortTimes(t testing.TB, got, want int) {
+	t.Helper()
 
-		for i, c := range testCases {
-			testBubbleSort(t, i, c)
-			testSelectionSort(t, i, c)
-			testInsertionSort(t, i, c)
-			testHeapSort(t, i, c)
-			testMergeSort(t, i, c)
-			testQuickSort(t, i, c)
-		}
-	})
+	if !(got == want) {
+		t.Errorf("actual times to sort using bubble sort algorithm: %d, but expected: %d", got, want)
+	}
+}
 
-	t.Run("test to sort alphabets", func(t *testing.T) {
-		testCases := []utils.TestCase{
-			{UnSortedList: []string{}, SortedList: []string{}, Err: sort.ErrEmptyList, Pass: 0},
-			{UnSortedList: []string{"apple", "dog"}, SortedList: []string{"apple", "dog"}, Pass: 1},
-			{UnSortedList: []string{"apple", "a", "apple", "dog"}, SortedList: []string{"a", "apple", "apple", "dog"}, Pass: 2},
-			{UnSortedList: []string{"apple", "dog", "banana"}, SortedList: []string{"apple", "banana", "dog"}, Pass: 2},
-			{UnSortedList: []string{"apple", "zzzz", "dog", "zzz", "banana", "zoo"}, SortedList: []string{"apple", "banana", "dog", "zoo", "zzz", "zzzz"}, Pass: 4},
-			{UnSortedList: []string{"apple", "Apple", "zzzz", "dog", "zzz", "banana", "zoo", "pineapple", "lemon", "watermelon", "orange", "melon", "strawberry", "blueberry", "cherry", "tomato"}, SortedList: []string{"Apple", "apple", "banana", "blueberry", "cherry", "dog", "lemon", "melon", "orange", "pineapple", "strawberry", "tomato", "watermelon", "zoo", "zzz", "zzzz"}, Pass: 11},
-		}
+func TestSortNumbers(t *testing.T) {
+	testCases := []testCase{
+		{description: "testcase1(empty_list)", unSortedList: []int{}, sortedList: []int{}, err: errors.ErrEmptyList},
+		{description: "testcase2", unSortedList: []int{1, 2}, sortedList: []int{1, 2}, bubbleSortTimes: 1},
+		{description: "testcase3", unSortedList: []int{1, -1, 3, 2}, sortedList: []int{-1, 1, 2, 3}, bubbleSortTimes: 2},
+		{description: "testcase4", unSortedList: []int{3, 2, -1, 0, 1}, sortedList: []int{-1, 0, 1, 2, 3}, bubbleSortTimes: 3},
+		{description: "testcase5", unSortedList: []int{5, 8, 0, 1, 9, 3, -1, 2, 6, 4, 7}, sortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, bubbleSortTimes: 7},
+		{description: "testcase6", unSortedList: []int{10, 1, 0, 3, 2, 5, 9, 4, 7, 8, 6, -1}, sortedList: []int{-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, bubbleSortTimes: 12},
+	}
 
-		for i, c := range testCases {
-			testBubbleSort(t, i, c)
-			testSelectionSort(t, i, c)
-			testInsertionSort(t, i, c)
-			testHeapSort(t, i, c)
-			testMergeSort(t, i, c)
-			testQuickSort(t, i, c)
-		}
-	})
+	for _, tt := range testCases {
+		t.Run(tt.description, func(t *testing.T) {
+			t.Run("bubble_sort", func(t *testing.T) {
+				testBubbleSort(t, tt)
+			})
+			t.Run("selection_sort", func(t *testing.T) {
+				testSelectionSort(t, tt)
+			})
+			t.Run("insertion_sort", func(t *testing.T) {
+				testInsertionSort(t, tt)
+			})
+			t.Run("heap_sort", func(t *testing.T) {
+				testHeapSort(t, tt)
+			})
+			t.Run("merge_sort", func(t *testing.T) {
+				testMergeSort(t, tt)
+			})
+			t.Run("quick_sort", func(t *testing.T) {
+				testQuickSort(t, tt)
+			})
+		})
+	}
+}
 
-	t.Run("test to list of unsupported type", func(t *testing.T) {
-		testCases := []utils.TestCase{
-			{UnSortedList: true, SortedList: true, Err: sort.ErrUnsupportedType},
-			{UnSortedList: []bool{true, false}, SortedList: []bool{true, false}, Err: sort.ErrUnsupportedType},
-			{UnSortedList: []byte("hello"), SortedList: []byte("hello"), Err: sort.ErrUnsupportedType},
-		}
+func TestSortStrings(t *testing.T) {
+	testCases := []testCase{
+		{description: "testcase1(empty_list)", unSortedList: []string{}, sortedList: []string{}, err: errors.ErrEmptyList},
+		{description: "testcase2", unSortedList: []string{"apple", "dog"}, sortedList: []string{"apple", "dog"}, bubbleSortTimes: 1},
+		{description: "testcase3", unSortedList: []string{"apple", "a", "apple", "dog"}, sortedList: []string{"a", "apple", "apple", "dog"}, bubbleSortTimes: 2},
+		{description: "testcase4", unSortedList: []string{"apple", "dog", "banana"}, sortedList: []string{"apple", "banana", "dog"}, bubbleSortTimes: 2},
+		{description: "testcase5", unSortedList: []string{"apple", "zzzz", "dog", "zzz", "banana", "zoo"}, sortedList: []string{"apple", "banana", "dog", "zoo", "zzz", "zzzz"}, bubbleSortTimes: 4},
+		{description: "testcase6", unSortedList: []string{"apple", "Apple", "zzzz", "dog", "zzz", "banana", "zoo", "pineapple", "lemon", "watermelon", "orange", "melon", "strawberry", "blueberry", "cherry", "tomato"}, sortedList: []string{"Apple", "apple", "banana", "blueberry", "cherry", "dog", "lemon", "melon", "orange", "pineapple", "strawberry", "tomato", "watermelon", "zoo", "zzz", "zzzz"}, bubbleSortTimes: 11},
+	}
 
-		for i, c := range testCases {
-			testBubbleSort(t, i, c)
-			testSelectionSort(t, i, c)
-			testInsertionSort(t, i, c)
-			testHeapSort(t, i, c)
-			testMergeSort(t, i, c)
-			testQuickSort(t, i, c)
-		}
-	})
+	for _, tt := range testCases {
+		t.Run(tt.description, func(t *testing.T) {
+			t.Run("bubble_sort", func(t *testing.T) {
+				testBubbleSort(t, tt)
+			})
+			t.Run("selection_sort", func(t *testing.T) {
+				testSelectionSort(t, tt)
+			})
+			t.Run("insertion_sort", func(t *testing.T) {
+				testInsertionSort(t, tt)
+			})
+			t.Run("heap_sort", func(t *testing.T) {
+				testHeapSort(t, tt)
+			})
+			t.Run("merge_sort", func(t *testing.T) {
+				testMergeSort(t, tt)
+			})
+			t.Run("quick_sort", func(t *testing.T) {
+				testQuickSort(t, tt)
+			})
+		})
+	}
+}
+
+func TestSortUnsupportedType(t *testing.T) {
+	testCases := []testCase{
+		{description: "bool", unSortedList: true, sortedList: true, err: errors.ErrUnsupportedType},
+		{description: "slice_of_bool", unSortedList: []bool{true, false}, sortedList: []bool{true, false}, err: errors.ErrUnsupportedType},
+		{description: "slice_of_byte", unSortedList: []byte("hello"), sortedList: []byte("hello"), err: errors.ErrUnsupportedType},
+	}
+
+	for _, tt := range testCases {
+		t.Run(tt.description, func(t *testing.T) {
+			t.Run("bubble_sort", func(t *testing.T) {
+				testBubbleSort(t, tt)
+			})
+			t.Run("selection_sort", func(t *testing.T) {
+				testSelectionSort(t, tt)
+			})
+			t.Run("insertion_sort", func(t *testing.T) {
+				testInsertionSort(t, tt)
+			})
+			t.Run("heap_sort", func(t *testing.T) {
+				testHeapSort(t, tt)
+			})
+			t.Run("merge_sort", func(t *testing.T) {
+				testMergeSort(t, tt)
+			})
+			t.Run("quick_sort", func(t *testing.T) {
+				testQuickSort(t, tt)
+			})
+		})
+	}
 }
 
 // TODO: benchmark each of the sort algorithms
