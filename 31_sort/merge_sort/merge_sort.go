@@ -5,7 +5,8 @@ package merge_sort
 import (
 	"reflect"
 
-	sort "github.com/ichang0301/learn-golang/31_sort"
+	"github.com/ichang0301/learn-golang/utils/errors"
+	"github.com/ichang0301/learn-golang/utils/list"
 )
 
 type mergeSortAlgorithm struct {
@@ -25,7 +26,7 @@ func (m *mergeSortAlgorithm) GetList() interface{} {
 }
 
 func (m *mergeSortAlgorithm) sort() error {
-	kind, err := sort.DetectType(m.list)
+	kind, err := list.DetectDataType(m.list)
 	if err != nil {
 		return err
 	}
@@ -33,17 +34,23 @@ func (m *mergeSortAlgorithm) sort() error {
 	switch kind {
 	// sort the list of integer type
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(m.list)
+		intList, err := list.GetIntSliceFromInterface(m.list)
+		if err != nil {
+			return err
+		}
 		m.list = MergeSortNumbers(intList)
 
 	// sort the list of string type
 	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(m.list)
+		stringList, err := list.GetStringSliceFromInterface(m.list)
+		if err != nil {
+			return err
+		}
 		m.list = MergeSortStrings(stringList)
 
 	// unsupported type
 	default:
-		return sort.ErrUnsupportedType
+		return errors.ErrUnsupportedType
 	}
 
 	return nil

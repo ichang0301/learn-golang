@@ -8,7 +8,8 @@ import (
 	"reflect"
 	"strings"
 
-	sort "github.com/ichang0301/learn-golang/31_sort"
+	"github.com/ichang0301/learn-golang/utils/errors"
+	"github.com/ichang0301/learn-golang/utils/list"
 )
 
 type bubbleSortAlgorithm struct {
@@ -33,7 +34,7 @@ func (b *bubbleSortAlgorithm) GetPass() int {
 }
 
 func (b *bubbleSortAlgorithm) sort() error {
-	kind, err := sort.DetectType(b.list)
+	kind, err := list.DetectDataType(b.list)
 	if err != nil {
 		return err
 	}
@@ -41,17 +42,23 @@ func (b *bubbleSortAlgorithm) sort() error {
 	switch kind {
 	// sort the list of integer type
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		intList := sort.InterfaceToSliceOfInt(b.list)
+		intList, err := list.GetIntSliceFromInterface(b.list)
+		if err != nil {
+			return err
+		}
 		b.list, b.pass = BubbleSortNumbers(intList)
 
 	// sort the list of string type
 	case reflect.String:
-		stringList := sort.InterfaceToSliceOfString(b.list)
+		stringList, err := list.GetStringSliceFromInterface(b.list)
+		if err != nil {
+			return err
+		}
 		b.list, b.pass = BubbleSortStrings(stringList)
 
 	// unsupported type
 	default:
-		return sort.ErrUnsupportedType
+		return errors.ErrUnsupportedType
 	}
 
 	return nil
